@@ -1,0 +1,29 @@
+#!/usr/local/bin/node
+
+// Core deps
+const os = require("os");
+
+// Load the (project-specific) configuration file
+const config = require("../../config/git-off-my-land-config.js");
+
+// Load the GOML library
+const GOML = require("../../node_modules/git-off-my-land/dist/lib/git-off-my-land-lib.js");
+
+// Run the pre-commit hook handler and see what we get!
+GOML.runGitHook(config, "pre-commit").then((violations) =>
+{
+    // violations is an Array, if it's non-empty, we detected problematic files
+    if(violations.length > 0)
+    {
+        let output = [config.violationsMessageHeader, ...violations];
+        let outputMessage = output.join(os.EOL);
+
+        console.error(outputMessage);  
+        process.exit(1);
+    }
+}).catch((err) => 
+{
+    // TODO: Should we just throw() here? (we're more or less doing that anyway really)
+    console.error(`${err}`);
+    process.exit(1);
+});
