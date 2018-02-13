@@ -65,4 +65,4 @@ If you find a sensitive, security issue with this application, please email me p
 
 
 ## License
-[MIT license](./license.md)
+[Apache 2.0 license](./license.md)
