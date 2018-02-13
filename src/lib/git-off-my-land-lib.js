@@ -1,18 +1,18 @@
 "use strict";
 
-const util = require("util");
-const childProcess = require("child_process");
-const os = require("os");
-const fs = require("fs");
+import {promisify} from "util";
+import {exec as cpexec} from "child_process";
+import {EOL} from "os";
+import {readFile as FSRReadFile, stat as FSStat} from "fs";
 
 // Promisified functions for use in async/await
-const exec = util.promisify(childProcess.exec);
-const readFile = util.promisify(fs.readFile);
-const stat = util.promisify(fs.stat);
+const exec = promisify(cpexec);
+const readFile = promisify(FSRReadFile);
+const stat = promisify(FSStat);
 
 // Flow type definitions etc.
 // @flow
-type hookName = "pre-commit"; // | "pre-push"; 
+type hookName = "pre-commit"; // eslint-disable-line no-undef
 
 
 async function filterFilesList(rawStdOut: string, ignoreGitStatusResultPrefixes: Array, EOLChar: string)
@@ -132,7 +132,7 @@ async function runGitHook(config: Object, hookType: hookName)
 
             if(rawFilesList.stderr === "")
             {
-                const filteredFiles = await filterFilesList(rawFilesList.stdout, config.ignoreGitStatusResultPrefixes, os.EOL);
+                const filteredFiles = await filterFilesList(rawFilesList.stdout, config.ignoreGitStatusResultPrefixes, EOL);
 
                 if(filteredFiles.size > 0)
                 {
@@ -167,7 +167,10 @@ async function runGitHook(config: Object, hookType: hookName)
     return p;
 }
 
+// Note: We export all the functions in order to unit test them. Only runGitHook should be used externally
 module.exports =
 {
+    filterFilesList: filterFilesList,
+    scanFilteredFiles:scanFilteredFiles,
     runGitHook: runGitHook
 };

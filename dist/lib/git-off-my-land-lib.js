@@ -1,14 +1,17 @@
 "use strict";
 
-const util = require("util");
-const childProcess = require("child_process");
-const os = require("os");
-const fs = require("fs");
+var _util = require("util");
+
+var _child_process = require("child_process");
+
+var _os = require("os");
+
+var _fs = require("fs");
 
 // Promisified functions for use in async/await
-const exec = util.promisify(childProcess.exec);
-const readFile = util.promisify(fs.readFile);
-const stat = util.promisify(fs.stat);
+const exec = (0, _util.promisify)(_child_process.exec);
+const readFile = (0, _util.promisify)(_fs.readFile);
+const stat = (0, _util.promisify)(_fs.stat);
 
 // Flow type definitions etc.
 
@@ -149,7 +152,7 @@ async function runGitHook(config, hookType) {
             const rawFilesList = await exec(config.gitStatusCmd, config.execOptions);
 
             if (rawFilesList.stderr === "") {
-                const filteredFiles = await filterFilesList(rawFilesList.stdout, config.ignoreGitStatusResultPrefixes, os.EOL);
+                const filteredFiles = await filterFilesList(rawFilesList.stdout, config.ignoreGitStatusResultPrefixes, _os.EOL);
 
                 if (filteredFiles.size > 0) {
                     output = await scanFilteredFiles(filteredFiles, config.fileContentRegexps, config.filesToIgnore);
@@ -175,7 +178,10 @@ async function runGitHook(config, hookType) {
     return p;
 }
 
+// Note: We export all the functions in order to unit test them. Only runGitHook should be used externally
 module.exports = {
+    filterFilesList: filterFilesList,
+    scanFilteredFiles: scanFilteredFiles,
     runGitHook: runGitHook
 };
 
