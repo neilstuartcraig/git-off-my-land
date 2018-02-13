@@ -8,11 +8,12 @@
 ## TEMP - TO DO
 
 * Add unit tests
-* Remove unnecessary comments
+DONE * Remove unnecessary comments
 * complete this readme file
 * make the postinstall script add the pre-commit file (and make sure it does install the config file)
-* remove unnecessary script and other junk from package.json
+DONE * remove unnecessary scripts and other junk from package.json
 * correct linter errors
+* Add a "scan all files" method (later)
 
 
 

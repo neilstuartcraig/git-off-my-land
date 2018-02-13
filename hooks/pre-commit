@@ -15,7 +15,7 @@ GOML.runGitHook(config, "pre-commit").then((violations) =>
     // violations is an Array, if it's non-empty, we detected problematic files
     if(violations.length > 0)
     {
-        let output = [config.violationsMessageHeader, ...violations];
+        let output = [config.violationsMessageHeader, ...violations, config.violationsMessageFooter];
         let outputMessage = output.join(os.EOL);
 
         console.error(outputMessage);  

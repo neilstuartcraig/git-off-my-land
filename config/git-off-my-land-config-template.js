@@ -37,5 +37,12 @@ module.exports =
         ".gitignore",
         "config/git-off-my-land-config.js"
     ],
-    "violationsMessageHeader": "*** Git Off My Land detected the following violations ***"
+    "violationsMessageHeader": "*** Git Off My Land detected the following violations ***",
+    "violationsMessageFooter": "*** If you are sure some of the above files are OK to be committed, add them to config/git-off-my-land-config.js in the 'filesToIgnore' Array then commit again ***",
+    "execOptions":
+    {
+        cwd: process.cwd(),
+        windowsHide: true,
+        timeout: 10
+    }
 };
