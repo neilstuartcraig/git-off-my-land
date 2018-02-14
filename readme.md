@@ -15,6 +15,7 @@ DONE * Remove unnecessary comments
 DONE * remove unnecessary scripts and other junk from package.json
 DONE (FOR NOW) * correct linter errors
 * Add a "scan all files" method (later)
+* warn based on file extensions
 
 
 

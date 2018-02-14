@@ -116,6 +116,7 @@ async function scanFilteredFiles(committedFiles: Set, fileContentRegexps: Array,
 }
 
 // Main handler function. This is the only exported function in the lib
+/* istanbul ignore next */
 async function runGitHook(config: Object, hookType: hookName)
 {
     let err;

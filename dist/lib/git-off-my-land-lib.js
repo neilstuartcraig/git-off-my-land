@@ -27,7 +27,7 @@ const hookName = function () {
         }
     });
     return hookName;
-}(); // | "pre-push"; 
+}(); // eslint-disable-line no-undef
 
 
 async function filterFilesList(rawStdOut, ignoreGitStatusResultPrefixes, EOLChar) {
@@ -132,6 +132,7 @@ async function scanFilteredFiles(committedFiles, fileContentRegexps, filesToIgno
 }
 
 // Main handler function. This is the only exported function in the lib
+/* istanbul ignore next */
 async function runGitHook(config, hookType) {
     if (!(config instanceof Object)) {
         throw new TypeError("Value of argument \"config\" violates contract.\n\nExpected:\nObject\n\nGot:\n" + _inspect(config));

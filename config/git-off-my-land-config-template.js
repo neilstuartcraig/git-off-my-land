@@ -5,20 +5,20 @@ module.exports =
     "fileContentRegexps":
     [
         {
-            "name": "RSA PUBLIC key",
-            "regexp": /-----BEGIN RSA CERTIFICATE-----.+-----END RSA CERTIFICATE-----/s
+            "name": "RSA, DSA or ECC Certificate",
+            "regexp": /-----BEGIN CERTIFICATE-----.+-----END CERTIFICATE-----/s
         },
         {
             "name": "RSA private key",
             "regexp": /-----BEGIN RSA PRIVATE KEY-----.+-----END RSA PRIVATE KEY-----/s
         },
         {
-            "name": "DSA public key",
-            "regexp": /-----BEGIN DSA CERTIFICATE-----.+-----END DSA CERTIFICATE-----/s
-        },
-        {
             "name": "DSA private key",
             "regexp": /-----BEGIN DSA PRIVATE KEY-----.+-----END DSA PRIVATE KEY-----/s
+        },
+        {
+            "name": "EC private key",
+            "regexp": /-----BEGIN EC PRIVATE KEY-----.+-----END EC PRIVATE KEY-----/s
         },
         {
             "name": "AWS access token",
