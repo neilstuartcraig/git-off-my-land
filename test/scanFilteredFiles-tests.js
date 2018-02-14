@@ -5,7 +5,7 @@ import test from "ava";
 
 import {scanFilteredFiles} from "../src/lib/git-off-my-land-lib.js";
 
-import {fileContentRegexps} from "../config/git-off-my-land-config-template.js";
+import {fileContentRegexps, violatingFilenameExtensions} from "../config/git-off-my-land-config-template.js";
 
 test("Correct operation, valid, populated inputs", async (t) => 
 {
@@ -16,6 +16,8 @@ test("Correct operation, valid, populated inputs", async (t) =>
     committedFiles.add("test/fixtures/certs/www.example.com-wrapped.key");
     committedFiles.add("test/fixtures/certs/example-ec-private.key");
     committedFiles.add("test/fixtures/certs/example-ec-private-wrapped.key");
+    committedFiles.add("test/fixtures/certs/example.der");
+    committedFiles.add("test/fixtures/certs/example.p12");
     committedFiles.add("test/fixtures/AWS/example-aws-access-token.txt");
     committedFiles.add("test/fixtures/AWS/example-aws-access-token-wrapped.txt");
     committedFiles.add("test/fixtures/AWS/example-aws-access-token-ignored.txt");
@@ -31,21 +33,32 @@ test("Correct operation, valid, populated inputs", async (t) =>
     ];
 
     const expectedOutput = 
-    [
+    [ 
         "test/fixtures/certs/www.example.com.pem matches rule RSA, DSA or ECC Certificate",
+        "test/fixtures/certs/www.example.com.pem matches file extension .pem",
         "test/fixtures/certs/www.example.com-wrapped.pem matches rule RSA, DSA or ECC Certificate",
+        "test/fixtures/certs/www.example.com-wrapped.pem matches file extension .pem",
         "test/fixtures/certs/www.example.com.key matches rule RSA private key",
+        "test/fixtures/certs/www.example.com.key matches file extension .key",
         "test/fixtures/certs/www.example.com-wrapped.key matches rule RSA private key",
+        "test/fixtures/certs/www.example.com-wrapped.key matches file extension .key",
         "test/fixtures/certs/example-ec-private.key matches rule EC private key",
+        "test/fixtures/certs/example-ec-private.key matches file extension .key",
         "test/fixtures/certs/example-ec-private-wrapped.key matches rule EC private key",
+        "test/fixtures/certs/example-ec-private-wrapped.key matches file extension .key",
+        "test/fixtures/certs/example.der matches file extension .der",
+        "test/fixtures/certs/example.p12 matches file extension .p12",
         "test/fixtures/AWS/example-aws-access-token.txt matches rule AWS access token",
         "test/fixtures/AWS/example-aws-access-token-wrapped.txt matches rule AWS access token",
         "test/fixtures/AWS/example-aws-access-secret.txt matches rule AWS secret token",
-        "test/fixtures/AWS/example-aws-access-secret-wrapped.txt matches rule AWS secret token"
+        "test/fixtures/AWS/example-aws-access-secret-wrapped.txt matches rule AWS secret token" 
     ];
 
-    const violations = await scanFilteredFiles(committedFiles, fileContentRegexps, filesToIgnore);
+    const violations = await scanFilteredFiles(committedFiles, fileContentRegexps, violatingFilenameExtensions, filesToIgnore);
     
+console.dir(violations);
+
+
 	t.deepEqual(violations.sort(), expectedOutput.sort(), "Ensure filteredFiles === expectedOutput");
 });
 
@@ -58,14 +71,14 @@ test("Correct operation, valid, empty inputs", async (t) =>
 
     const expectedOutput = [];
 
-    const violations = await scanFilteredFiles(committedFiles, fileContentRegexps, filesToIgnore);
+    const violations = await scanFilteredFiles(committedFiles, fileContentRegexps, violatingFilenameExtensions, filesToIgnore);
     
 	t.deepEqual(violations, expectedOutput, "Ensure filteredFiles === expectedOutput");
 });
 
 /*
 // This fails on "Unhandled Rejection" - needs to be fixed!
-test("Error handling, invalid inputs (files don't exist)", async (t) => 
+test("Error handling, invalid inputs (files don"t exist)", async (t) => 
 {
     const committedFiles = new Set();
     committedFiles.add("does/not.exist");
@@ -74,7 +87,7 @@ test("Error handling, invalid inputs (files don't exist)", async (t) =>
 
     await t.throws(async () => 
     {
-        await scanFilteredFiles(committedFiles, fileContentRegexps, filesToIgnore), "Ensure the promise is rejected on error";
+        await scanFilteredFiles(committedFiles, fileContentRegexps, violatingFilenameExtensions, filesToIgnore), "Ensure the promise is rejected on error";
     }).catch(() => {});
 });
 */

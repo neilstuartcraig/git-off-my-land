@@ -4,6 +4,7 @@ import {promisify} from "util";
 import {exec as cpexec} from "child_process";
 import {EOL} from "os";
 import {readFile as FSRReadFile, stat as FSStat} from "fs";
+import {extname} from "path";
 
 // Promisified functions for use in async/await
 const exec = promisify(cpexec);
@@ -61,7 +62,7 @@ async function filterFilesList(rawStdOut: string, ignoreGitStatusResultPrefixes:
 }
 
 
-async function scanFilteredFiles(committedFiles: Set, fileContentRegexps: Array, filesToIgnore: Array)
+async function scanFilteredFiles(committedFiles: Set, fileContentRegexps: Array, violatingFilenameExtensions: Array, filesToIgnore: Array)
 {
     let err;
     let violations = [];
@@ -84,10 +85,21 @@ async function scanFilteredFiles(committedFiles: Set, fileContentRegexps: Array,
                 for(let j in fileContentRegexps)
                 {
                     const pattern = fileContentRegexps[j];
-        
+                            
                     if(content.match(pattern.regexp) && filesToIgnore.includes(committedFile) === false)
                     {
                         violations.push(`${committedFile} matches rule ${pattern.name}`);
+                        break;
+                    }
+                }
+
+                const extension = extname(committedFile).toLocaleLowerCase();
+
+                for(let k in violatingFilenameExtensions)
+                {
+                    if(violatingFilenameExtensions.includes(extension) === true)
+                    {
+                        violations.push(`${committedFile} matches file extension ${extension}`);
                         break;
                     }
                 }
@@ -137,7 +149,7 @@ async function runGitHook(config: Object, hookType: hookName)
 
                 if(filteredFiles.size > 0)
                 {
-                    output = await scanFilteredFiles(filteredFiles, config.fileContentRegexps, config.filesToIgnore);
+                    output = await scanFilteredFiles(filteredFiles, config.fileContentRegexps, config.violatingFilenameExtensions, config.filesToIgnore);
                 }
             }
             else

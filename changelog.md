@@ -1,5 +1,9 @@
 # git-off-my-land changelog
 
+## v1.3.0
+* Add: details to readme
+* Add pfx, p7 file extensions
+
 ## v1.2.0
 * Add: Unit tests for scanFilteredFiles()
 * Add: EC cert detection (PEM)

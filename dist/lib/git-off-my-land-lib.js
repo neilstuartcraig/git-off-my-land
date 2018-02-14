@@ -8,6 +8,8 @@ var _os = require("os");
 
 var _fs = require("fs");
 
+var _path = require("path");
+
 // Promisified functions for use in async/await
 const exec = (0, _util.promisify)(_child_process.exec);
 const readFile = (0, _util.promisify)(_fs.readFile);
@@ -77,13 +79,17 @@ async function filterFilesList(rawStdOut, ignoreGitStatusResultPrefixes, EOLChar
     return p;
 }
 
-async function scanFilteredFiles(committedFiles, fileContentRegexps, filesToIgnore) {
+async function scanFilteredFiles(committedFiles, fileContentRegexps, violatingFilenameExtensions, filesToIgnore) {
     if (!(committedFiles instanceof Set)) {
         throw new TypeError("Value of argument \"committedFiles\" violates contract.\n\nExpected:\nSet\n\nGot:\n" + _inspect(committedFiles));
     }
 
     if (!Array.isArray(fileContentRegexps)) {
         throw new TypeError("Value of argument \"fileContentRegexps\" violates contract.\n\nExpected:\nArray\n\nGot:\n" + _inspect(fileContentRegexps));
+    }
+
+    if (!Array.isArray(violatingFilenameExtensions)) {
+        throw new TypeError("Value of argument \"violatingFilenameExtensions\" violates contract.\n\nExpected:\nArray\n\nGot:\n" + _inspect(violatingFilenameExtensions));
     }
 
     if (!Array.isArray(filesToIgnore)) {
@@ -111,6 +117,15 @@ async function scanFilteredFiles(committedFiles, fileContentRegexps, filesToIgno
 
                         if (content.match(pattern.regexp) && filesToIgnore.includes(committedFile) === false) {
                             violations.push(`${committedFile} matches rule ${pattern.name}`);
+                            break;
+                        }
+                    }
+
+                    for (let k in violatingFilenameExtensions) {
+                        const extension = (0, _path.extname)(committedFile).toLocaleLowerCase();
+
+                        if (violatingFilenameExtensions.includes(extension) === true) {
+                            violations.push(`${committedFile} matches file extension ${extension}`);
                             break;
                         }
                     }
@@ -156,7 +171,7 @@ async function runGitHook(config, hookType) {
                 const filteredFiles = await filterFilesList(rawFilesList.stdout, config.ignoreGitStatusResultPrefixes, _os.EOL);
 
                 if (filteredFiles.size > 0) {
-                    output = await scanFilteredFiles(filteredFiles, config.fileContentRegexps, config.filesToIgnore);
+                    output = await scanFilteredFiles(filteredFiles, config.fileContentRegexps, config.violatingFilenameExtensions, config.filesToIgnore);
                 }
             } else {
                 err = rawFilesList.stderr;
