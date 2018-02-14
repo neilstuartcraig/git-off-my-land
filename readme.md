@@ -28,7 +28,7 @@ Content scans include certificates, key, secrets etc. which are wrapped/embedded
 
 ## Installation
 
-You will need an initialised git repo. If you don't have this yet, see `Initialising git` (below)
+You will need an initialised git repo. If you don't have this yet, see `Initialising git` (below)  
 You will need an initialised npm repo. If you don't have this yet, see `Initialising npm` (below)
 
 ```
