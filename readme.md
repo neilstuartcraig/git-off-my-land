@@ -1,48 +1,47 @@
 # git-off-my-land
-
 [![Travis CI build status](https://travis-ci.org/gh-username/git-off-my-land.svg)](https://travis-ci.org/neilstuartcraig/git-off-my-land)
 
 
 ## Overview
+`git-off-my-land` is a [git](https://git-scm.com/) [pre-commit hook](https://git-scm.com/book/gr/v2/Customizing-Git-Git-Hooks) which aims to detect security-sensitive files which have been accidentally included in the commit - _before they leave your computer_.
 
-`git-off-my-land` is a [git](https://git-scm.com/) [pre-commit hook](https://git-scm.com/book/gr/v2/Customizing-Git-Git-Hooks) which tries to detect files which have been accidentally included in the commit.  
+The hook runs at the `pre-commit` phase and prevents the commit from completing if any violations are found. Only git source-controlled files are included in the scan so scans are usually fast. You can of course ignore files if they  are false positives.
 
-The hook runs `pre-commit` and prevents the commit from completing if any violations are found. Only git source-controlled files are included in the scan. You can of course ignore files if they  are false positives.
-
-`git-off-my-land` currently tests ascii (not binary) content and filename extensions of all committed files for the following file types:
+`git-off-my-land` currently scans ascii (not binary) content and checks filename extensions of all committed files for the following file types:
 
 * RSA, DSA and EC certificates and private keys (by content and file extension)
 * PKCS12 and PCKS7 certificates (by file extension)
 * DER certificates (by file extension)
 * Amazon/AWS access tokens and secrets (by content)
 
-Content scans include certificates, key, secrets etc. which are wrapped/embedded inside other files.  
+Content scans can detect certificates, key, secrets etc. which are wrapped/embedded inside other files.  
 
 `git-off-my-land` is intended to be operating-system agnostic and uses raw git commands so it should woth with any git-based service e.g. github, gitlab etc.
 
 
 ## Prerequisites
+You will need to have the following installed on your computer:  
+
 * [NodeJS](https://nodejs.org/) and [npm](https://www.npmjs.com/) (NPM is included in the installers from nodejs.org)
 * [git](https://git-scm.com/)
 
 
 ## Installation
-
-You will need an initialised git repo. If you don't have this yet, see `Initialising git` (below)  
-You will need an initialised npm repo. If you don't have this yet, see `Initialising npm` (below)
+You will need an initialised:  
+* git repo (see [Initialising git](#initialising-git))
+* npm repo (see [Initialising npm](#initialising-npm))
 
 ```
 npm install git-off-my-land --save-prod
 ```
 
-This will install `git-off-my-land` and its dependencies then will add a `config` direectory/folder which contains a configuration file - you can edit this file to customise the behaviour during scanning, the file contains notes on the format, data types etc. The final thing the installer does is to add the `pre-commit` 
+This will install `git-off-my-land` and its dependencies then will add a `config` directory/folder which contains a configuration file - you can edit this file to customise the behaviour during scanning, the file contains notes on the format, data types etc. The final thing the installer does is to add the `pre-commit` hook into `.git/` (which is created via `git init`).  
 
-Assuming that was all successful, every time you run `git commit ...` in your repo, `git-off-my-land` will scan the committed files. If the committed files do not contain any violations, `git-off-my-land` will be invisible but if violations _are_ detected, `git-off-my-land` will show you the violations and prevent the `git commit` from completing.
+Assuming that was all successful, every time you run `git commit ...` in your repo, `git-off-my-land` will scan the committed files. If the committed files do not contain any violations, `git-off-my-land` will be almost invisible and will not get in your way, but if violations _are_ detected `git-off-my-land` will show you the violations and prevent the `git commit` from completing. This means that problematic files will not make it into the commit and thus will not leave your computer even if you continue to run a `git push`.
 
 
 ### Initialising git
-
-If you haven't already, you need to initialise git in the root of your codebase via:
+You can initialise a git repo by running the following in the root of your codebase:
 
 ```
 git init
@@ -50,8 +49,7 @@ git init
 
 
 ### Initialising npm
-
-If you haven't already, you need to initialise npm in the root of your git repo via:
+You can initialise an npm repo by running the following in the root of your codebase:
 
 ```
 npm init
@@ -65,9 +63,6 @@ It's worth noting for anyone not familiar with npm and node that you'll want to 
 echo "node_modules/" >> .gitignore
 ```
 
-Assuming your npm repo is set up, you can now install `git-off-my-land` via:
-
-
 
 ## Semver
 This project aims to maintain the [semver](http://semver.org/) version numbering scheme.
@@ -78,15 +73,14 @@ See the [changelog](./changelog.md) file
 
 
 ## To do
-
 * Fix unit tests for `throws()` in tests
 * Set up Travis
 * Add integration test for `runGitHook()` so we can check via Travis if it works on e.g. Windows
 * Make the postinstall script add the pre-commit file (and make sure it does install the config file)
 * Add an easy CLI way to add violating files to ignore list if they violation is bogus
+* Add an optional output message to show how long the scan took
 * Add tests for `.pfx` etc.
 * Add a "scan all files" method
-
 
 
 ## Contributing

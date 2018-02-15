@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.1
+* Clarify/fix: items in readme
+
 ## v1.3.0
 * Add: details to readme
 * Add pfx, p7 file extensions
