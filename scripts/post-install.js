@@ -35,6 +35,7 @@ const dest =
   path.join(cwd, "/.git/", hookDir, "/", hookDestinationFilename)
 ];
 
+console.dir(src);
 console.dir(dest);
 
 
@@ -43,40 +44,31 @@ for(let i in src)
   let sourceFile = src[i];
   let destFile = dest[i];
 
-  // Check we can read the source file
-  fs.access(sourceFile, fs.R_OK, (sourceFileAccessErr) =>
+  // Read the source file
+  fs.readFile(sourceFile, (readsourceFileErr, readsourceFileData) =>
   {
-    if(sourceFileAccessErr)
+    if(readsourceFileErr)
     {
-      throw sourceFileAccessErr;
+      throw readsourceFileErr;
     }
 
-    // Read the source file
-    fs.readFile(sourceFile, (readsourceFileErr, readsourceFileData) =>
+    // Append the contents of the source file to the destination file - this is OK because we already checked that the destination file doesn't exist, so this will just create it
+    fs.appendFile(destFile, readsourceFileData, {flag: "ax"}, (appendErr) =>
     {
-      if(readsourceFileErr)
+      if(appendErr)
       {
-        throw readsourceFileErr;
+        if(appendErr.code === "EEXIST")
+        {
+          console.log("Config file " + destFile + " exists, will not overwrite it");
+          process.exit(0);
+        }
+        else
+        {
+          throw appendErr;
+        }
       }
 
-      // Append the contents of the source file to the destination file - this is OK because we already checked that the destination file doesn't exist, so this will just create it
-      fs.appendFile(destFile, readsourceFileData, {flag: "ax"}, (appendErr) =>
-      {
-        if(appendErr)
-        {
-          if(appendErr.code === "EEXIST")
-          {
-            console.log("Config file " + destFile + " exists, will not overwrite it");
-            process.exit(0);
-          }
-          else
-          {
-            throw appendErr;
-          }
-        }
-
-        console.log("Copied config file to " + destFile + " - please amend it with your details before running the app");
-      });
+      console.log("Copied config file to " + destFile + " - please amend it with your details before running the app");
     });
   });
 }
