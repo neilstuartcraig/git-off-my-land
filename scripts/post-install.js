@@ -1,49 +1,83 @@
 #! /usr/bin/env node
 "use strict";
 
+// Note that this file is kept deliberately simple as it doesn't go through the babel build process...
+// ... and yes, it's all sync and horrible but it's a post-install script so ;-)
+
+
+console.log(`cwd: ${process.cwd()}`);
+console.log(`init cwd: ${process.env.INIT_CWD}`);
+process.exit();
+
+
 const path = require("path");
 const fs = require("fs");
 
-const configDir = "config";
+const configDir = "config"; // Relative to destination repo root
 const configTemplateFilename = "git-off-my-land-config-template.js";
 const configDestinationFilename = "git-off-my-land-config.js";
 
-const src = path.join("./", configDir, "/", configTemplateFilename).replace(" ", "\ ");
-const dest = path.join("./", configDir, "/", configDestinationFilename);
+const hookDir = ".git/hooks"; // Relative to destination repo root
+const hookTemplateFilename = "pre-commit";
+const hookDestinationFilename = "pre-commit";
 
-// Check we can read the source file
-fs.access(src, fs.R_OK, (srcAccessErr) =>
+const cwd = process.env.INIT_CWD;
+
+const src = 
+[
+  path.join("./", configDir, "/", configTemplateFilename).replace(" ", "\ "),
+  path.join("./", hookDir, "/", hookTemplateFilename).replace(" ", "\ ")
+];
+
+const dest = 
+[
+  path.join(cwd, "/", configDir, "/", configDestinationFilename),
+  path.join(cwd, "/", hookDir, "/", hookDestinationFilename)
+];
+
+console.dir(dest);
+
+
+for(let i in src)
 {
-  if(srcAccessErr)
-  {
-    throw srcAccessErr;
-  }
+  let sourceFile = src[i];
+  let destFile = dest[i];
 
-  // Read the source file
-  fs.readFile(src, (readSrcErr, readSrcData) =>
+  // Check we can read the source file
+  fs.access(sourceFile, fs.R_OK, (sourceFileAccessErr) =>
   {
-    if(readSrcErr)
+    if(sourceFileAccessErr)
     {
-      throw readSrcErr;
+console.log("argh");
+      throw sourceFileAccessErr;
     }
 
-    // Append the contents of the source file to the destination file - this is OK because we already checked that the destination file doesn't exist, so this will just create it
-    fs.appendFile(dest, readSrcData, {flag: "ax"}, (appendErr) =>
+    // Read the source file
+    fs.readFile(sourceFile, (readsourceFileErr, readsourceFileData) =>
     {
-      if(appendErr)
+      if(readsourceFileErr)
       {
-        if(appendErr.code === "EEXIST")
-        {
-          console.log("Config file " + dest + " exists, will not overwrite it");
-          process.exit(0);
-        }
-        else
-        {
-          throw appendErr;
-        }
+        throw readsourceFileErr;
       }
 
-      console.log("Copied config file to " + dest + " - please amend it with your details before running the app");
+      // Append the contents of the source file to the destination file - this is OK because we already checked that the destination file doesn't exist, so this will just create it
+      fs.appendFile(destFile, readsourceFileData, {flag: "ax"}, (appendErr) =>
+      {
+        if(appendErr)
+        {
+          if(appendErr.code === "EEXIST")
+          {
+            console.log("Config file " + destFile + " exists, will not overwrite it");
+            process.exit(0);
+          }
+          else
+          {
+            throw appendErr;
+          }
+        }
+
+        console.log("Copied config file to " + destFile + " - please amend it with your details before running the app");
+      });
     });
   });
-});
+}
