@@ -27,8 +27,8 @@ const hookFilename = "pre-commit";
 
 try
 {
-  fs.copyFileSync(path.join(configSrcDir, "/", configFilename, configDestDir, "/", configFilename, fs.constants.COPYFILE_EXCL));
-  fs.copyFileSync(path.join(hookSrcDir, "/", hookFilename, hookDestDir, "/", hookFilename, fs.constants.COPYFILE_EXCL));
+  fs.copyFileSync(path.join(configSrcDir, "/", configFilename), path.join(configDestDir, "/", configFilename), fs.constants.COPYFILE_EXCL);
+  fs.copyFileSync(path.join(hookSrcDir, "/", hookFilename), path.join(hookDestDir, "/", hookFilename), fs.constants.COPYFILE_EXCL);
 }
 catch (e)
 {
