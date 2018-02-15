@@ -13,62 +13,24 @@ console.log(`init cwd: ${process.env.INIT_CWD}`);
 const path = require("path");
 const fs = require("fs");
 
-const configDir = "config"; // Relative to destination repo root
-const configTemplateFilename = "git-off-my-land-config-template.js";
-const configDestinationFilename = "git-off-my-land-config.js";
+const srcBaseDir = process.cwd();
+const destBaseDir = process.env.INIT_CWD;
 
-const hookDir = "hooks"; // Relative to destination repo root
-const hookTemplateFilename = "pre-commit";
-const hookDestinationFilename = "pre-commit";
+const configSrcDir = path.join(srcBaseDir, "/config");
+const configDestDir = path.join(destBaseDir, "/config");
+const configFilename = "git-off-my-land-config.js";
 
-const cwd = process.env.INIT_CWD; // process.env.INIT_CWD is correct with npm install <pkg name>
-
-const src = 
-[
-  path.join("./", configDir, "/", configTemplateFilename).replace(" ", "\ "),
-  path.join("./", hookDir, "/", hookTemplateFilename).replace(" ", "\ ")
-];
-
-const dest = 
-[
-  path.join(cwd, "/", configDir, "/", configDestinationFilename),
-  path.join(cwd, "/.git/", hookDir, "/", hookDestinationFilename)
-];
-
-console.dir(src);
-console.dir(dest);
+const hookSrcDir = path.join(srcBaseDir, "/hooks");
+const hookDestDir = path.join(destBaseDir, "/.git/hooks");
+const hookFilename = "pre-commit";
 
 
-for(let i in src)
+try
 {
-  let sourceFile = src[i];
-  let destFile = dest[i];
-
-  // Read the source file
-  fs.readFile(sourceFile, (readsourceFileErr, readsourceFileData) =>
-  {
-    if(readsourceFileErr)
-    {
-      throw readsourceFileErr;
-    }
-
-    // Append the contents of the source file to the destination file - this is OK because we already checked that the destination file doesn't exist, so this will just create it
-    fs.appendFile(destFile, readsourceFileData, {flag: "ax"}, (appendErr) =>
-    {
-      if(appendErr)
-      {
-        if(appendErr.code === "EEXIST")
-        {
-          console.log("Config file " + destFile + " exists, will not overwrite it");
-          process.exit(0);
-        }
-        else
-        {
-          throw appendErr;
-        }
-      }
-
-      console.log("Copied config file to " + destFile + " - please amend it with your details before running the app");
-    });
-  });
+  fs.copyFileSync(path.join(configSrcDir, "/", configFilename, configDestDir, "/", configFilename, fs.constants.COPYFILE_EXCL));
+  fs.copyFileSync(path.join(hookSrcDir, "/", hookFilename, hookDestDir, "/", hookFilename, fs.constants.COPYFILE_EXCL));
+}
+catch (e)
+{
+  console.error(e);
 }
