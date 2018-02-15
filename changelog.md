@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.11
+* Tidy: postinstall script
+
 ## v1.3.10
 * Fixing: postinstall script - work in progress
 
