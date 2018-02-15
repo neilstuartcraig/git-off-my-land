@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.2
+* Enable: Travis CI test runner
+
 ## v1.3.1
 * Clarify/fix: items in readme
 
