@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.3
+* Removed: `console.log()` from test
+
 ## v1.3.2
 * Enable: Travis CI test runner
 

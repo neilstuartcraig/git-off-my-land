@@ -55,9 +55,6 @@ test("Correct operation, valid, populated inputs", async (t) =>
     ];
 
     const violations = await scanFilteredFiles(committedFiles, fileContentRegexps, violatingFilenameExtensions, filesToIgnore);
-    
-console.dir(violations);
-
 
 	t.deepEqual(violations.sort(), expectedOutput.sort(), "Ensure filteredFiles === expectedOutput");
 });
