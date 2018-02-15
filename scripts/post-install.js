@@ -7,7 +7,7 @@
 
 console.log(`cwd: ${process.cwd()}`);
 console.log(`init cwd: ${process.env.INIT_CWD}`);
-process.exit();
+// process.exit();
 
 
 const path = require("path");
@@ -17,11 +17,11 @@ const configDir = "config"; // Relative to destination repo root
 const configTemplateFilename = "git-off-my-land-config-template.js";
 const configDestinationFilename = "git-off-my-land-config.js";
 
-const hookDir = ".git/hooks"; // Relative to destination repo root
+const hookDir = "hooks"; // Relative to destination repo root
 const hookTemplateFilename = "pre-commit";
 const hookDestinationFilename = "pre-commit";
 
-const cwd = process.env.INIT_CWD;
+const cwd = process.env.INIT_CWD; // process.env.INIT_CWD is correct with npm install <pkg name>
 
 const src = 
 [
@@ -32,7 +32,7 @@ const src =
 const dest = 
 [
   path.join(cwd, "/", configDir, "/", configDestinationFilename),
-  path.join(cwd, "/", hookDir, "/", hookDestinationFilename)
+  path.join(cwd, "/.git/", hookDir, "/", hookDestinationFilename)
 ];
 
 console.dir(dest);
@@ -48,7 +48,6 @@ for(let i in src)
   {
     if(sourceFileAccessErr)
     {
-console.log("argh");
       throw sourceFileAccessErr;
     }
 

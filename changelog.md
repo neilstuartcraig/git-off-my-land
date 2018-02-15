@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.5
+* Fixing: postinstall script - work in progress
+
 ## v1.3.4
 * Fixing: postinstall script - work in progress
 
