@@ -1,6 +1,6 @@
 # git-off-my-land
 [![Travis CI build status](https://travis-ci.org/neilstuartcraig/git-off-my-land.svg?branch=master)](https://travis-ci.org/neilstuartcraig/git-off-my-land)
-[![Snyk status](https://snyk.io/package/npm/git-off-my-land/badge.svg)]
+![Snyk status](https://snyk.io/package/npm/git-off-my-land/badge.svg)
 
 ## Overview
 `git-off-my-land` is a [git](https://git-scm.com/) [pre-commit hook](https://git-scm.com/book/gr/v2/Customizing-Git-Git-Hooks) which aims to detect security-sensitive files which have been accidentally included in the commit - _before they leave your computer_.

@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.25
+* Fix Snyk badge in readme
+
 ## v1.3.24
 * Add: Snyk badge to readme
 
