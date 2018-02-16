@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.24
+* Add: Snyk badge to readme
+
 ## v1.3.23
 * Fix: Run Snyk on Travis build
 
