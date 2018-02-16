@@ -8,7 +8,7 @@ const path = require("path");
 const fs = require("fs");
 
 const srcBaseDir = process.cwd();
-const destBaseDir = process.env.INIT_CWD;
+const destBaseDir = process.env.INIT_CWD || process.cwd();
 
 const configSrcDir = path.join(srcBaseDir, "/config");
 console.log(`src: ${configSrcDir}`);
