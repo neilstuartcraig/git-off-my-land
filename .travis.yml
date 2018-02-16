@@ -11,7 +11,7 @@ node_js:
   - "9"
   - "node"
 script:
-  - npm run vuln-scan
+  # - npm run vuln-scan
   - npm test
 sudo: false
 before_install:

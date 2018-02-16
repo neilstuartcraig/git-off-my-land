@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.18
+* Disable Snyk for the mo - needs auth
+
 ## v1.3.17
 * Fix: missing config template (remove from `.gitignore` :-))
 
