@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.22
+* Fix: Travis badge image url
+
 ## v1.3.21
 * Revert: to `src` rather than `dist` for lib version used in tests
 
