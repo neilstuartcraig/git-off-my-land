@@ -2,4 +2,3 @@ node_modules
 .nyc_output
 npm-debug.log
 coverage
-config/git-off-my-land-config.js

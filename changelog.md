@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.17
+* Fix: missing config template (remove from `.gitignore` :-))
+
 ## v1.3.16
 * Fix: missing config template
 
