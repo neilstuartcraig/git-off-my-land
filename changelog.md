@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.26
+* Add: snyk protect to package.json vuln-scan script
+
 ## v1.3.25
 * Fix Snyk badge in readme
 

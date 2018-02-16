@@ -1,6 +1,6 @@
 {
     "name": "git-off-my-land",
-    "version": "1.3.25",
+    "version": "1.3.26",
     "description": "A git pre-commit hook which scans committed files for TLS certificates, private keys, AWS credentials and more Edit Add topics",
     "main": "dist/lib/git-off-my-land.js",
     "engines" : { 
@@ -16,7 +16,7 @@
         "babel": "inherit"
     },
     "scripts": {
-        "vuln-scan": "./node_modules/.bin/snyk test",
+        "vuln-scan": "./node_modules/.bin/snyk protect && ./node_modules/.bin/snyk test",
         "lint": "node_modules/.bin/eslint ./*.js src/lib/*.js test/*.js",
         "test": "node_modules/.bin/nyc node_modules/.bin/ava test/*.js",
         "create-report": "./node_modules/.bin/nyc report --reporter=lcov --reporter=html",
