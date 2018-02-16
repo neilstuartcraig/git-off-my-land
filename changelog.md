@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.21
+* Revert: to `src` rather than `dist` for lib version used in tests
+
 ## v1.3.20
 * Fix: Travis config to exclude old node versions which won't work due to regex or async/await
 * Add `engines` to `package.json` to help with the above at runtime

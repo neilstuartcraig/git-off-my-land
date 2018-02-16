@@ -3,8 +3,7 @@
 import {EOL as OSEOL} from "os";
 import test from "ava";
 
-// import {filterFilesList} from "../src/lib/git-off-my-land-lib.js";
-import {filterFilesList} from "../dist/lib/git-off-my-land-lib.js";
+import {filterFilesList} from "../src/lib/git-off-my-land-lib.js";
 
 test("Correct operation, valid inputs", async (t) => 
 {
