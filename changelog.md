@@ -1,5 +1,9 @@
 # git-off-my-land changelog
 
+## v1.3.20
+* Fix: Travis config to exclude old node versions which won't work due to regex or async/await
+* Add `engines` to `package.json` to help with the above at runtime
+
 ## v1.3.19
 * Fix: Trying built files in tests for node <9
 
