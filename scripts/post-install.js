@@ -8,16 +8,13 @@ const path = require("path");
 const fs = require("fs");
 
 const srcBaseDir = process.cwd();
-const destBaseDir = process.env.INIT_CWD || process.cwd();
+const destBaseDir = process.env.INIT_CWD || process.cwd(); // process.env.INIT_CWD is intended to allow this script to run on local file: based installs
 
 const configSrcDir = path.join(srcBaseDir, "/config");
-console.log(`src: ${configSrcDir}`);
 const configDestDir = path.join(destBaseDir, "/config");
-console.log(`dest: ${configDestDir}`);
-
 const configFilename = "git-off-my-land-config.js";
 const configSrcFile = path.join(configSrcDir, "/", configFilename);
-const configDestFile = path.join(configDestDir, "/", configFilename)
+const configDestFile = path.join(configDestDir, "/", configFilename);
 
 const hookSrcDir = path.join(srcBaseDir, "/hooks");
 const hookDestDir = path.join(destBaseDir, "/.git/hooks");

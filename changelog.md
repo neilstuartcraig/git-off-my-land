@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.16
+* Fix: missing config template
+
 ## v1.3.15
 * Fixing: Failing Travis tests due to (at least) `./git/hooks/` not existing on Travis
 

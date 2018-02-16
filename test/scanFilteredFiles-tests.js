@@ -5,7 +5,7 @@ import test from "ava";
 
 import {scanFilteredFiles} from "../src/lib/git-off-my-land-lib.js";
 
-import {fileContentRegexps, violatingFilenameExtensions} from "../config/git-off-my-land-config-template.js";
+import {fileContentRegexps, violatingFilenameExtensions} from "../config/git-off-my-land-config.js";
 
 test("Correct operation, valid, populated inputs", async (t) => 
 {
