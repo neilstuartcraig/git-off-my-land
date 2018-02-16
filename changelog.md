@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.14
+* Fixing: Failing Travis tests due to (at least) `./git/hooks/` not existing on Travis
+
 ## v1.3.13
 * Fixing: Failing Travis tests due to (at least) `./git/hooks/` not existing on Travis
 

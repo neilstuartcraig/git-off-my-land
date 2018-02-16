@@ -11,7 +11,10 @@ const srcBaseDir = process.cwd();
 const destBaseDir = process.env.INIT_CWD;
 
 const configSrcDir = path.join(srcBaseDir, "/config");
+console.log(`src: ${configSrcDir}`);
 const configDestDir = path.join(destBaseDir, "/config");
+console.log(`dest: ${configDestDir}`);
+
 const configFilename = "git-off-my-land-config.js";
 const configSrcFile = path.join(configSrcDir, "/", configFilename);
 const configDestFile = path.join(configDestDir, "/", configFilename)
