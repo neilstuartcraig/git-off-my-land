@@ -3,7 +3,8 @@
 import {EOL as OSEOL} from "os";
 import test from "ava";
 
-import {scanFilteredFiles} from "../src/lib/git-off-my-land-lib.js";
+// import {scanFilteredFiles} from "../src/lib/git-off-my-land-lib.js";
+import {scanFilteredFiles} from "../dist/lib/git-off-my-land-lib.js";
 
 import {fileContentRegexps, violatingFilenameExtensions} from "../config/git-off-my-land-config.js";
 

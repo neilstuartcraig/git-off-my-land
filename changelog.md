@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.19
+* Fix: Trying built files in tests for node <9
+
 ## v1.3.18
 * Disable Snyk for the mo - needs auth
 
