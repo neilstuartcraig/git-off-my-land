@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v1.3.23
+* Fix: Run Snyk on Travis build
+
 ## v1.3.22
 * Fix: Travis badge image url
 
