@@ -14,3 +14,5 @@ script:
   - npm run vuln-scan
   - npm test
 sudo: false
+before_install:
+  - "mkdir -p ./git/hooks"
