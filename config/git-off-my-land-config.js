@@ -58,8 +58,10 @@ module.exports =
     // Each entry must be a string, a relative (to the repo root) path to the file, including the filename extension
     "filesToIgnore": 
     [
-        ".gitignore",
-        "config/git-off-my-land-config.js"
+        /\.gitignore/, // Note: We need to ignore the .gitignore file because it may contain filenames which violate rules and those files won't be in the commit
+        /config\/git-off-my-land-config.js/,
+        /node_modules\/git-off-my-land\/config\/git-off-my-land-config.js/,
+        /node_modules\/git-off-my-land\/test\/fixtures\/.*/ // Note: This ignores test fixtures in installations of GOML
     ],
 
     // The header for the output when violating file(s) are detected

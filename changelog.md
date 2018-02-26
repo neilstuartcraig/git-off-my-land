@@ -1,5 +1,10 @@
 # git-off-my-land changelog
 
+## v2.0.0
+* Change: output format for `violations` is now an object, one property per filename which causes >=1 rule vioations with sub-props for `content` and `extensions` which detail violations
+* Change: config `filesToIgnore` is now an array of regular expressions
+* Change: Ignore test fixtures by default so as not to incorrectly trip after installation
+
 ## v1.3.27
 * Fix: Errors/omissions in `readme.md`
 

@@ -25,39 +25,40 @@ test("Correct operation, valid, populated inputs", async (t) =>
     committedFiles.add("test/fixtures/AWS/example-aws-access-secret.txt");
     committedFiles.add("test/fixtures/AWS/example-aws-access-secret-wrapped.txt");
     committedFiles.add("test/fixtures/innocuous.txt");
+    committedFiles.add("test/fixtures/certs/ignored/example-ec-private--ignored.key");
+    committedFiles.add("test/fixtures/certs/ignored/www.example.com--ignored.key");
 
     const filesToIgnore = 
     [
-        ".gitignore",
-        "config/git-off-my-land-config.js",
-        "test/fixtures/AWS/example-aws-access-token-ignored.txt"
+        /\.gitignore/,
+        /config\/git-off-my-land-config.js/,
+        /test\/fixtures\/certs\/ignored\/.+/
     ];
 
     const expectedOutput = 
-    [ 
-        "test/fixtures/certs/www.example.com.pem matches rule RSA, DSA or ECC Certificate",
-        "test/fixtures/certs/www.example.com.pem matches file extension .pem",
-        "test/fixtures/certs/www.example.com-wrapped.pem matches rule RSA, DSA or ECC Certificate",
-        "test/fixtures/certs/www.example.com-wrapped.pem matches file extension .pem",
-        "test/fixtures/certs/www.example.com.key matches rule RSA private key",
-        "test/fixtures/certs/www.example.com.key matches file extension .key",
-        "test/fixtures/certs/www.example.com-wrapped.key matches rule RSA private key",
-        "test/fixtures/certs/www.example.com-wrapped.key matches file extension .key",
-        "test/fixtures/certs/example-ec-private.key matches rule EC private key",
-        "test/fixtures/certs/example-ec-private.key matches file extension .key",
-        "test/fixtures/certs/example-ec-private-wrapped.key matches rule EC private key",
-        "test/fixtures/certs/example-ec-private-wrapped.key matches file extension .key",
-        "test/fixtures/certs/example.der matches file extension .der",
-        "test/fixtures/certs/example.p12 matches file extension .p12",
-        "test/fixtures/AWS/example-aws-access-token.txt matches rule AWS access token",
-        "test/fixtures/AWS/example-aws-access-token-wrapped.txt matches rule AWS access token",
-        "test/fixtures/AWS/example-aws-access-secret.txt matches rule AWS secret token",
-        "test/fixtures/AWS/example-aws-access-secret-wrapped.txt matches rule AWS secret token" 
-    ];
+    { 
+        "test/fixtures/certs/www.example.com.pem": { content: [ "RSA, DSA or ECC Certificate" ], extension: [ ".pem" ] },
+        "test/fixtures/certs/www.example.com-wrapped.pem": { content: [ "RSA, DSA or ECC Certificate" ],extension: [ ".pem" ] },
+        "test/fixtures/certs/www.example.com.key": { content: [ "RSA private key" ], extension: [ ".key" ] },
+        "test/fixtures/certs/www.example.com-wrapped.key": { content: [ "RSA private key" ], extension: [ ".key" ] },
+        "test/fixtures/certs/example-ec-private.key": { content: [ "EC private key" ], extension: [ ".key" ] },
+        "test/fixtures/certs/example-ec-private-wrapped.key": { content: [ "EC private key" ], extension: [ ".key" ] },
+        "test/fixtures/certs/example.der": { content: [], extension: [ ".der" ] },
+        "test/fixtures/certs/example.p12": { content: [], extension: [ ".p12" ] },
+        "test/fixtures/AWS/example-aws-access-token.txt": { content: [ "AWS access token" ], extension: [] },
+        "test/fixtures/AWS/example-aws-access-token-wrapped.txt": { content: [ "AWS access token" ], extension: [] },
+        "test/fixtures/AWS/example-aws-access-token-ignored.txt": { content: [ "AWS access token" ], extension: [] },
+        "test/fixtures/AWS/example-aws-access-secret.txt": { content: [ "AWS secret token" ], extension: [] },
+        "test/fixtures/AWS/example-aws-access-secret-wrapped.txt": { content: [ "AWS secret token" ], extension: [] } 
+    };
 
     const violations = await scanFilteredFiles(committedFiles, fileContentRegexps, violatingFilenameExtensions, filesToIgnore);
 
-	t.deepEqual(violations.sort(), expectedOutput.sort(), "Ensure filteredFiles === expectedOutput");
+    // We'll loop this so we don't need the ordering to be correct
+    for(let i in violations)
+    {
+        t.deepEqual(violations[i], expectedOutput[i], `${i} must match expected`);
+    }
 });
 
 
@@ -73,6 +74,11 @@ test("Correct operation, valid, empty inputs", async (t) =>
     
 	t.deepEqual(violations, expectedOutput, "Ensure filteredFiles === expectedOutput");
 });
+
+
+
+
+
 
 /*
 // This fails on "Unhandled Rejection" - needs to be fixed!
