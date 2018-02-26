@@ -214,7 +214,7 @@ async function runGitHook(config: Object, hookType: hookName)
             reject(err);
         }
         else
-        {
+        {          
             resolve(output);
         }
     });

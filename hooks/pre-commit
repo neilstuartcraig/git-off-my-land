@@ -12,13 +12,25 @@ const GOML = require("../../node_modules/git-off-my-land/dist/lib/git-off-my-lan
 // Run the pre-commit hook handler and see what we get!
 GOML.runGitHook(config, "pre-commit").then((violations) =>
 {
-    // violations is an Array, if it's non-empty, we detected problematic files
-    if(violations.length > 0)
+    if(violations)
     {
-        let output = [config.violationsMessageHeader, ...violations, config.violationsMessageFooter];
-        let outputMessage = output.join(os.EOL);
+console.dir(violations);
+        
+        console.error(config.violationsMessageHeader);
 
-        console.error(outputMessage);  
+        for(let i in violations)
+        {
+            const contentViolationsMessage = violations[i].content.join(", ");
+
+            const extensionsViolationsMessage = violations[i].extensions.join(", ");
+
+            const violationsMessage = `Content: ${contentViolationsMessage || "none"}. Filename extension: ${extensionsViolationsMessage || "none"}`;
+
+            console.error(`${i} violates rules - ${violationsMessage}`);
+        }
+
+        console.error(config.violationsMessageFooter);
+
         process.exit(1);
     }
 }).catch((err) => 
