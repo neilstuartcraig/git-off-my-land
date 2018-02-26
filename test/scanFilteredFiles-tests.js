@@ -1,6 +1,5 @@
 "use strict";
 
-import {EOL as OSEOL} from "os";
 import test from "ava";
 
 import {scanFilteredFiles} from "../src/lib/git-off-my-land-lib.js";
@@ -9,6 +8,8 @@ import {fileContentRegexps, violatingFilenameExtensions} from "../config/git-off
 
 test("Correct operation, valid, populated inputs", async (t) => 
 {
+    // NOTE: See http://fm4dd.com/openssl/certexamples.htm for examples
+
     let committedFiles = new Set();
     committedFiles.add("test/fixtures/certs/www.example.com.pem");
     committedFiles.add("test/fixtures/certs/www.example.com-wrapped.pem");
