@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v2.0.4
+* Fix: Remove unintended console log "output:"
+
 ## v2.0.3
 * Fix: Typo/bug in `pre-commit` handler output formatting
 

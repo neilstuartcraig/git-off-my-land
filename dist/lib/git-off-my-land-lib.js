@@ -218,10 +218,8 @@ async function runGitHook(config, hookType) {
         // We only reject the promise if there is an actual error...
         // ...we don't reject on finding violating files, that will be handled in the pre-commit script
         if (err) {
-console.log("errrrrr");            
             reject(err);
         } else {
-console.log(`output: ${output}`);            
             resolve(output);
         }
     });
