@@ -185,7 +185,11 @@ async function runGitHook(config: Object, hookType: hookName)
         {
             const rawFilesList = await exec(config.gitStatusCmd, config.execOptions);
 
-            if(rawFilesList.stderr === "")
+            if(rawFilesList.stderr.length > 0)
+            {
+                err = rawFilesList.stderr;
+            }
+            else if(rawFilesList.stdout.length > 0)
             {
                 const filteredFiles = await filterFilesList(rawFilesList.stdout, config.ignoreGitStatusResultPrefixes, EOL);
 
@@ -193,11 +197,7 @@ async function runGitHook(config: Object, hookType: hookName)
                 {
                     output = await scanFilteredFiles(filteredFiles, config.fileContentRegexps, config.violatingFilenameExtensions, config.filesToIgnore);
                 }
-            }
-            else
-            {
-                err = rawFilesList.stderr;
-            }
+            }            
         }
         catch(e)
         {

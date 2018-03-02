@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v2.0.2
+* Fix: Bug in handling of empty `git status` without error
+
 ## v2.0.1
 * Fix: Missing prune in `scanFilteredFiles()`
 
