@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v2.2.3
+* Fix: incorrect version number!
+
 ## v2.2.0
 * Add: Detection for existing config and hook files on reinstall
 
