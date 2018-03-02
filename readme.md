@@ -75,11 +75,9 @@ See the [changelog](./changelog.md) file
 ## To do
 * Fix unit tests for `throws()` in tests
 * Add integration test for `runGitHook()` so we can check via Travis if it works on e.g. Windows
-* Make the postinstall script handle errors properly
 * Add an easy CLI way to add violating files to ignore list if they violation is bogus
 * Add an optional output message to show how long the scan took
 * Add a "scan all files" method
-* Fix bug on reinstall/update lib - errors on `/config` already existing
 
 
 ## Contributing

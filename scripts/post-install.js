@@ -22,17 +22,39 @@ const hookFilename = "pre-commit";
 const hookSrcFile = path.join(hookSrcDir, "/", hookFilename);
 const hookDestFile = path.join(hookDestDir, "/", hookFilename);
 
+// TODO: Make this neater
 try
 {
-  // Create the ./config dir
   fs.mkdirSync(configDestDir); // eslint-disable-line no-sync
-  // Copy the source config file to ./config
-  fs.copyFileSync(configSrcFile, configDestFile, fs.constants.COPYFILE_EXCL); // eslint-disable-line no-sync
-
-  // Copy the pre-commit hook into ./git/hooks
-  fs.copyFileSync(hookSrcFile, hookDestFile, fs.constants.COPYFILE_EXCL); // eslint-disable-line no-sync
 }
 catch (e)
 {
-  console.error(e);
+  if(e.code != "EEXIST") // Don't fail on existing dir
+  {
+    console.error(e);
+  }
+}
+
+try
+{
+  fs.copyFileSync(configSrcFile, configDestFile, fs.constants.COPYFILE_EXCL); // eslint-disable-line no-sync
+}
+catch (e)
+{
+  if(e.code != "EEXIST") // Don't overwrite existing file
+  {
+    console.error(e);
+  }
+}
+
+try 
+{
+    fs.copyFileSync(hookSrcFile, hookDestFile, fs.constants.COPYFILE_EXCL); // eslint-disable-line no-sync
+}
+catch(e)
+{
+  if(e.code != "EEXIST") // Don't overwrite existing file
+  {
+    console.error(e);
+  }
 }

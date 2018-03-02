@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v2.1.1
+* Fix: post-install script to not fail on existing dir/file(s)
+
 ## v2.1.0
 * Add: built-in (tested) output formatting
 
