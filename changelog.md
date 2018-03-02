@@ -1,5 +1,11 @@
 # git-off-my-land changelog
 
+## v2.2.0
+* Add: Detection for existing config and hook files on reinstall
+
+## v2.1.2
+* Improve: readme.md
+
 ## v2.1.1
 * Fix: post-install script to not fail on existing dir/file(s)
 

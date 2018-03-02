@@ -32,12 +32,15 @@ You will need an initialised:
 * npm repo (see [Initialising npm](#initialising-npm))
 
 ```
-npm install git-off-my-land --save-prod
+npm install git-off-my-land --save-dev
 ```
 
 This will install `git-off-my-land` and its dependencies then will add a `config` directory/folder which contains a configuration file - you can edit this file to customise the behaviour during scanning, the file contains notes on the format, data types etc. The final thing the installer does is to add the `pre-commit` hook into `.git/` (which is created via `git init`).  
 
 Assuming that was all successful, every time you run `git commit ...` in your repo, `git-off-my-land` will scan the committed files. If the committed files do not contain any violations, `git-off-my-land` will be almost invisible and will not get in your way, but if violations _are_ detected `git-off-my-land` will show you the violations and prevent the `git commit` from completing. This means that problematic files will not make it into the commit and thus will not leave your computer even if you continue to run a `git push`.
+
+### Updating
+If you have an old version of `git-off-my-land`, you can simply re-run `npm install git-off-my-land --save-dev`. The installer won't overwrite existing config or pre-commit hook files, rather it will create a new file which includes a timestamp in the filename. Since it's not possiible for the installer to easily determine whether you modified either the config or pre-vommit hook file, you will need to manually review/replace them as appropriate. 
 
 
 ### Initialising git
