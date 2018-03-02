@@ -169,6 +169,57 @@ async function scanFilteredFiles(committedFiles: Set, fileContentRegexps: Array,
     return p;    
 }
 
+async function formatOutput(header: string, violations: Object, footer: string)
+{
+    let err;
+    let output: string = "";
+
+    try
+    {
+        if(violations)
+        {
+            if(Object.keys(violations).length > 0)
+            {
+                let violationsDetails: Array = [];
+                
+                for(let i in violations)
+                {
+                    const contentViolationsMessage = violations[i].content.join(", ");
+
+                    const extensionsViolationsMessage = violations[i].extension.join(", ");
+
+                    const violationsMessage = `Content: ${contentViolationsMessage || "none"}. Filename extension: ${extensionsViolationsMessage || "none"}`;
+
+                    violationsDetails.push(`${i} - ${violationsMessage}`);
+                }
+
+                const sortedViolationsDetails = violationsDetails.sort();
+
+                output = [header, ...sortedViolationsDetails, footer].join(EOL);
+            }
+        }
+    }
+    catch(e)
+    {
+        err = e;
+    }
+
+    const p = new Promise((resolve, reject) => 
+    {
+        if(err)
+        {
+            reject(err);
+        }
+        else
+        {
+            resolve(output);
+        }
+
+    });
+
+    return p;
+}
+
 // Main handler function. This is the only exported function in the lib
 /* istanbul ignore next */
 async function runGitHook(config: Object, hookType: hookName)
@@ -195,7 +246,12 @@ async function runGitHook(config: Object, hookType: hookName)
 
                 if(filteredFiles.size > 0)
                 {
-                    output = await scanFilteredFiles(filteredFiles, config.fileContentRegexps, config.violatingFilenameExtensions, config.filesToIgnore);
+                    const violations = await scanFilteredFiles(filteredFiles, config.fileContentRegexps, config.violatingFilenameExtensions, config.filesToIgnore);
+
+                    if(violations)
+                    {
+                        output = await formatOutput(config.violationsMessageHeader, violations, config.violationsMessageFooter);
+                    }
                 }
             }            
         }
@@ -227,5 +283,6 @@ module.exports =
 {
     filterFilesList: filterFilesList,
     scanFilteredFiles:scanFilteredFiles,
+    formatOutput: formatOutput,
     runGitHook: runGitHook
 };

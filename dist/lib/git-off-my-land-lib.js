@@ -179,6 +179,61 @@ async function scanFilteredFiles(committedFiles, fileContentRegexps, violatingFi
     return p;
 }
 
+async function formatOutput(header, violations, footer) {
+    if (!(typeof header === 'string')) {
+        throw new TypeError("Value of argument \"header\" violates contract.\n\nExpected:\nstring\n\nGot:\n" + _inspect(header));
+    }
+
+    if (!(violations instanceof Object)) {
+        throw new TypeError("Value of argument \"violations\" violates contract.\n\nExpected:\nObject\n\nGot:\n" + _inspect(violations));
+    }
+
+    if (!(typeof footer === 'string')) {
+        throw new TypeError("Value of argument \"footer\" violates contract.\n\nExpected:\nstring\n\nGot:\n" + _inspect(footer));
+    }
+
+    let err;
+    let output = "";
+
+    try {
+        if (violations) {
+            if (Object.keys(violations).length > 0) {
+                let violationsDetails = [];
+
+                for (let i in violations) {
+                    const contentViolationsMessage = violations[i].content.join(", ");
+
+                    const extensionsViolationsMessage = violations[i].extension.join(", ");
+
+                    const violationsMessage = `Content: ${contentViolationsMessage || "none"}. Filename extension: ${extensionsViolationsMessage || "none"}`;
+
+                    violationsDetails.push(`${i} - ${violationsMessage}`);
+                }
+
+                const sortedViolationsDetails = violationsDetails.sort();
+
+                output = [header, ...sortedViolationsDetails, footer].join(_os.EOL);
+
+                if (!(typeof output === 'string')) {
+                    throw new TypeError("Value of variable \"output\" violates contract.\n\nExpected:\nstring\n\nGot:\n" + _inspect(output));
+                }
+            }
+        }
+    } catch (e) {
+        err = e;
+    }
+
+    const p = new Promise((resolve, reject) => {
+        if (err) {
+            reject(err);
+        } else {
+            resolve(output);
+        }
+    });
+
+    return p;
+}
+
 // Main handler function. This is the only exported function in the lib
 /* istanbul ignore next */
 async function runGitHook(config, hookType) {
@@ -206,7 +261,11 @@ async function runGitHook(config, hookType) {
                 const filteredFiles = await filterFilesList(rawFilesList.stdout, config.ignoreGitStatusResultPrefixes, _os.EOL);
 
                 if (filteredFiles.size > 0) {
-                    output = await scanFilteredFiles(filteredFiles, config.fileContentRegexps, config.violatingFilenameExtensions, config.filesToIgnore);
+                    const violations = await scanFilteredFiles(filteredFiles, config.fileContentRegexps, config.violatingFilenameExtensions, config.filesToIgnore);
+
+                    if (violations) {
+                        output = await formatOutput(config.violationsMessageHeader, violations, config.violationsMessageFooter);
+                    }
                 }
             }
         } catch (e) {
@@ -231,6 +290,7 @@ async function runGitHook(config, hookType) {
 module.exports = {
     filterFilesList: filterFilesList,
     scanFilteredFiles: scanFilteredFiles,
+    formatOutput: formatOutput,
     runGitHook: runGitHook
 };
 

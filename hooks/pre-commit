@@ -7,31 +7,12 @@ const config = require("../../config/git-off-my-land-config.js");
 const GOML = require("../../node_modules/git-off-my-land/dist/lib/git-off-my-land-lib.js");
 
 // Run the pre-commit hook handler and see what we get!
-GOML.runGitHook(config, "pre-commit").then((violations) =>
+GOML.runGitHook(config, "pre-commit").then((violationsMessage) =>
 {
-    // Note: violations will be undefined if there are none
-    // TODO: Ensure we always receive an Object to negate needing this if
-    if(violations)
+    if(violationsMessage)
     {
-        if(Object.keys(violations).length > 0)
-        {
-            console.error(config.violationsMessageHeader);
-
-            for(let i in violations)
-            {
-                const contentViolationsMessage = violations[i].content.join(", ");
-
-                const extensionsViolationsMessage = violations[i].extension.join(", ");
-
-                const violationsMessage = `Content: ${contentViolationsMessage || "none"}. Filename extension: ${extensionsViolationsMessage || "none"}`;
-
-                console.error(`${i} violates rules - ${violationsMessage}`);
-            }
-
-            console.error(config.violationsMessageFooter);
-
-            process.exit(1);
-        }
+        console.error(violationsMessage);
+        process.exit(1);
     }
 }).catch((err) => 
 {

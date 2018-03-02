@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v2.1.0
+* Add: built-in (tested) output formatting
+
 ## v2.0.4
 * Fix: Remove unintended console log "output:"
 
