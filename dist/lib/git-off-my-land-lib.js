@@ -97,39 +97,72 @@ async function scanFilteredFiles(committedFiles, fileContentRegexps, violatingFi
     }
 
     let err;
-    let violations = [];
+    let filteredViolations = [];
 
     try {
+        let rawViolations = [];
         const committedFilesArray = [...committedFiles];
 
         // Note: The method for handling async/await in a for loop is from https://blog.lavrton.com/javascript-loops-how-to-handle-async-await-6252dd3c795
         for (let i in committedFilesArray) {
             const committedFile = committedFilesArray[i];
-
             const stats = await stat(committedFile);
-
-            if (stats.isFile()) // Check we're not going to try to read a dir as that would bomb
+            if (stats.isFile()) // Check we're not going to try to read a dir because that would bomb
                 {
-                    const content = await readFile(committedFile, "utf8");
+                    if (rawViolations[committedFile] === undefined) {
+                        rawViolations[committedFile] = {
+                            content: [],
+                            extension: []
+                        };
+                    }
 
+                    // Content-based scanning
+                    const content = await readFile(committedFile, "utf8");
                     for (let j in fileContentRegexps) {
                         const pattern = fileContentRegexps[j];
 
                         if (content.match(pattern.regexp) && filesToIgnore.includes(committedFile) === false) {
-                            violations.push(`${committedFile} matches rule ${pattern.name}`);
-                            break;
+                            rawViolations[committedFile]["content"].push(pattern.name);
+                            // NOTE: We don't break here because a file may violate > 1 rule
                         }
                     }
 
+                    // Filename extension-based scanning
+                    const extension = (0, _path.extname)(committedFile).toLocaleLowerCase();
                     for (let k in violatingFilenameExtensions) {
-                        const extension = (0, _path.extname)(committedFile).toLocaleLowerCase();
-
                         if (violatingFilenameExtensions.includes(extension) === true) {
-                            violations.push(`${committedFile} matches file extension ${extension}`);
+                            rawViolations[committedFile]["extension"].push(extension);
                             break;
                         }
                     }
                 }
+        }
+
+        // TODO -> Array.filter() 
+        // Prune any empty array items
+        let prunedViolations = [];
+        for (let violation in rawViolations) {
+            const contentLength = rawViolations[violation].content.length;
+            const extensionLength = rawViolations[violation].extension.length;
+            if (contentLength > 0 || extensionLength > 0) {
+                prunedViolations[violation] = rawViolations[violation];
+            }
+        }
+
+        // TODO -> Array.filter()        
+        // Filter for files the user has chosen to ignore
+        for (let violation in prunedViolations) {
+            let ignore = false;
+            for (let i in filesToIgnore) {
+                const match = violation.match(filesToIgnore[i]);
+                if (match) {
+                    ignore = true;
+                }
+            }
+
+            if (ignore === false) {
+                filteredViolations[violation] = prunedViolations[violation];
+            }
         }
     } catch (e) {
         err = e;
@@ -139,7 +172,7 @@ async function scanFilteredFiles(committedFiles, fileContentRegexps, violatingFi
         if (err) {
             reject(err);
         } else {
-            resolve(violations);
+            resolve(filteredViolations);
         }
     });
 

@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v2.0.1
+* Fix: Missing prune in `scanFilteredFiles()`
+
 ## v2.0.0
 * Change: output format for `violations` is now an object, one property per filename which causes >=1 rule vioations with sub-props for `content` and `extensions` which detail violations
 * Change: config `filesToIgnore` is now an array of regular expressions
