@@ -200,9 +200,9 @@ async function runGitHook(config, hookType) {
         try {
             const rawFilesList = await exec(config.gitStatusCmd, config.execOptions);
 
-            if (rawFilesList.stderr.length > 0) {
+            if (rawFilesList.stderr != "") {
                 err = rawFilesList.stderr;
-            } else if (rawFilesList.stdout.length > 0) {
+            } else if (rawFilesList.stdout != "") {
                 const filteredFiles = await filterFilesList(rawFilesList.stdout, config.ignoreGitStatusResultPrefixes, _os.EOL);
 
                 if (filteredFiles.size > 0) {
@@ -218,8 +218,10 @@ async function runGitHook(config, hookType) {
         // We only reject the promise if there is an actual error...
         // ...we don't reject on finding violating files, that will be handled in the pre-commit script
         if (err) {
+console.log("errrrrr");            
             reject(err);
         } else {
+console.log(`output: ${output}`);            
             resolve(output);
         }
     });

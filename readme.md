@@ -79,6 +79,7 @@ See the [changelog](./changelog.md) file
 * Add an easy CLI way to add violating files to ignore list if they violation is bogus
 * Add an optional output message to show how long the scan took
 * Add a "scan all files" method
+* Fix bug on reinstall/update lib - errors on `/config` already existing
 
 
 ## Contributing

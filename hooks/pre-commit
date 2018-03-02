@@ -1,8 +1,5 @@
 #!/usr/local/bin/node
 
-// Core deps
-const os = require("os");
-
 // Load the (project-specific) configuration file
 const config = require("../../config/git-off-my-land-config.js");
 
@@ -12,26 +9,29 @@ const GOML = require("../../node_modules/git-off-my-land/dist/lib/git-off-my-lan
 // Run the pre-commit hook handler and see what we get!
 GOML.runGitHook(config, "pre-commit").then((violations) =>
 {
+    // Note: violations will be undefined if there are none
+    // TODO: Ensure we always receive an Object to negate needing this if
     if(violations)
     {
-console.dir(violations);
-        
-        console.error(config.violationsMessageHeader);
-
-        for(let i in violations)
+        if(Object.keys(violations).length > 0)
         {
-            const contentViolationsMessage = violations[i].content.join(", ");
+            console.error(config.violationsMessageHeader);
 
-            const extensionsViolationsMessage = violations[i].extensions.join(", ");
+            for(let i in violations)
+            {
+                const contentViolationsMessage = violations[i].content.join(", ");
 
-            const violationsMessage = `Content: ${contentViolationsMessage || "none"}. Filename extension: ${extensionsViolationsMessage || "none"}`;
+                const extensionsViolationsMessage = violations[i].extension.join(", ");
 
-            console.error(`${i} violates rules - ${violationsMessage}`);
+                const violationsMessage = `Content: ${contentViolationsMessage || "none"}. Filename extension: ${extensionsViolationsMessage || "none"}`;
+
+                console.error(`${i} violates rules - ${violationsMessage}`);
+            }
+
+            console.error(config.violationsMessageFooter);
+
+            process.exit(1);
         }
-
-        console.error(config.violationsMessageFooter);
-
-        process.exit(1);
     }
 }).catch((err) => 
 {

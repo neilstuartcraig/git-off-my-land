@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v2.0.3
+* Fix: Typo/bug in `pre-commit` handler output formatting
+
 ## v2.0.2
 * Fix: Bug in handling of empty `git status` without error
 
