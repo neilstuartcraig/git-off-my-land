@@ -1,5 +1,9 @@
 # git-off-my-land changelog
 
+## v2.2.4
+* Misc: Migrate to-dos and linter errors to issues
+* Update: version number
+
 ## v2.2.3
 * Fix: incorrect version number!
 

@@ -62,7 +62,7 @@ async function filterFilesList(rawStdOut: string, ignoreGitStatusResultPrefixes:
 }
 
 
-async function scanFilteredFiles(committedFiles: Set, fileContentRegexps: Array, violatingFilenameExtensions: Array, filesToIgnore: Array)
+async function scanFilteredFiles(committedFiles: Set, fileContentRegexps: Array, violatingFilenameExtensions: Array, filesToIgnore: Array) //eslint-disable-line complexity
 {
     let err;    
     let filteredViolations = [];  
@@ -103,7 +103,7 @@ async function scanFilteredFiles(committedFiles: Set, fileContentRegexps: Array,
 
                 // Filename extension-based scanning
                 const extension = extname(committedFile).toLocaleLowerCase();
-                for(let k in violatingFilenameExtensions)
+                for(let k in violatingFilenameExtensions) // eslint-disable-line no-unused-vars
                 {
                     if(violatingFilenameExtensions.includes(extension) === true)
                     {
@@ -114,7 +114,6 @@ async function scanFilteredFiles(committedFiles: Set, fileContentRegexps: Array,
             }
         }
 
-// TODO -> Array.filter() 
         // Prune any empty array items
         let prunedViolations = [];
         for(let violation in rawViolations)
@@ -127,7 +126,6 @@ async function scanFilteredFiles(committedFiles: Set, fileContentRegexps: Array,
             }
         }
 
-// TODO -> Array.filter()        
         // Filter for files the user has chosen to ignore
         for(let violation in prunedViolations)
         {

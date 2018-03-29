@@ -35,6 +35,7 @@ test("Correct operation, valid, populated inputs", async (t) =>
         /test\/fixtures\/certs\/ignored\/.+/
     ];
 
+    /* eslint-disable */
     const expectedOutput = 
     { 
         "test/fixtures/certs/www.example.com.pem": { content: [ "RSA, DSA or ECC Certificate" ], extension: [ ".pem" ] },
@@ -51,6 +52,7 @@ test("Correct operation, valid, populated inputs", async (t) =>
         "test/fixtures/AWS/example-aws-access-secret.txt": { content: [ "AWS secret token" ], extension: [] },
         "test/fixtures/AWS/example-aws-access-secret-wrapped.txt": { content: [ "AWS secret token" ], extension: [] } 
     };
+    /* eslint-enable */
 
     const violations = await scanFilteredFiles(committedFiles, fileContentRegexps, violatingFilenameExtensions, filesToIgnore);
 
