@@ -1,5 +1,9 @@
 # git-off-my-land changelog
 
+## v2.2.5
+* Docs: Add known issue WRT Node < 8 not being able to run unit tests - https://github.com/neilstuartcraig/git-off-my-land/issues/3
+* Docs: Add known issue WRT Node < 8 returning error on first run - https://github.com/neilstuartcraig/git-off-my-land/issues/7
+
 ## v2.2.4
 * Misc: Migrate to-dos and linter errors to issues
 * Update: version number

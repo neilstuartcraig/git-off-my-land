@@ -66,6 +66,14 @@ It's worth noting for anyone not familiar with npm and node that you'll want to 
 echo "node_modules/" >> .gitignore
 ```
 
+### Known bug/issue with Node < 8
+Currently, if you are running a Node runtime which is older than Node 9, you will probably get an error the first time you run `git commit ...` saying:
+
+```
+Error: Command failed: git status --porcelain
+```
+
+Simply re-running the `git commit ...` should succeed. This bug/issue is captured in https://github.com/neilstuartcraig/git-off-my-land/issues/7.
 
 ## Semver
 This project aims to maintain the [semver](http://semver.org/) version numbering scheme.
@@ -89,6 +97,9 @@ Contributions are *very* welcome for fixes, improvements, new features, document
 The ideal way to receive contributions is via a [Github Pull Request](https://help.github.com/articles/using-pull-requests/) from the master branch. Please ensure that at least unit tests (you can run these via `npm test`) and if possible, linter rules (`npm run lint`).
 
 If you find a sensitive, security issue with this application, please email me privately in the first instance: `neil [dot] craig [at] thedotproduct [dot] org`.
+
+### Known issue with Node < 8
+Node runtime versions < 8 currently cannot run the unit tests (`npm t` or `npm run test`). This is due to (i believe) a misconfiguration of Ava, see https://github.com/neilstuartcraig/git-off-my-land/issues/3.
 
 
 ## License
