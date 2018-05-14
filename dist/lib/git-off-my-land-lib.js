@@ -79,7 +79,8 @@ async function filterFilesList(rawStdOut, ignoreGitStatusResultPrefixes, EOLChar
     return p;
 }
 
-async function scanFilteredFiles(committedFiles, fileContentRegexps, violatingFilenameExtensions, filesToIgnore) {
+async function scanFilteredFiles(committedFiles, fileContentRegexps, violatingFilenameExtensions, filesToIgnore) //eslint-disable-line complexity
+{
     if (!(committedFiles instanceof Set)) {
         throw new TypeError("Value of argument \"committedFiles\" violates contract.\n\nExpected:\nSet\n\nGot:\n" + _inspect(committedFiles));
     }
@@ -129,7 +130,8 @@ async function scanFilteredFiles(committedFiles, fileContentRegexps, violatingFi
 
                     // Filename extension-based scanning
                     const extension = (0, _path.extname)(committedFile).toLocaleLowerCase();
-                    for (let k in violatingFilenameExtensions) {
+                    for (let k in violatingFilenameExtensions) // eslint-disable-line no-unused-vars
+                    {
                         if (violatingFilenameExtensions.includes(extension) === true) {
                             rawViolations[committedFile]["extension"].push(extension);
                             break;
@@ -138,7 +140,6 @@ async function scanFilteredFiles(committedFiles, fileContentRegexps, violatingFi
                 }
         }
 
-        // TODO -> Array.filter() 
         // Prune any empty array items
         let prunedViolations = [];
         for (let violation in rawViolations) {
@@ -149,7 +150,6 @@ async function scanFilteredFiles(committedFiles, fileContentRegexps, violatingFi
             }
         }
 
-        // TODO -> Array.filter()        
         // Filter for files the user has chosen to ignore
         for (let violation in prunedViolations) {
             let ignore = false;

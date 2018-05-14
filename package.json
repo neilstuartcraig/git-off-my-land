@@ -19,8 +19,8 @@
         "create-report": "./node_modules/.bin/nyc report --reporter=lcov --reporter=html",
         "show-report": "open coverage/index.html",
         "report": "npm run create-report && npm run show-report",
-        "build": "./node_modules/babel-cli/bin/babel.js src/ --out-dir dist",
-        "postinstall": "./scripts/post-install.js",
+        "build": "./node_modules/babel-cli/bin/babel.js src/ --out-dir dist && ./node_modules/babel-cli/bin/babel.js scripts/src/ --out-dir scripts/dist",
+        "postinstall": "./scripts/dist/post-install.js",
         "preversion": "npm run build && npm test && npm run create-report",
         "version": "npm run vuln-scan && git add -A",
         "postversion": "git push --follow-tags && npm publish"

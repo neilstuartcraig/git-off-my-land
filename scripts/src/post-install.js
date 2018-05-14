@@ -10,7 +10,18 @@ const fs = require("fs");
 const ts = new Date().getTime();
 
 const srcBaseDir = process.cwd();
-const destBaseDir = process.env.INIT_CWD || process.cwd(); // process.env.INIT_CWD is intended to allow this script to run on local file: based installs
+// NOTE:
+// process.env.INIT_CWD is intended to allow this script to run on local file: based installs but, it only works on modern node versions
+// On node 6 (at least), process.cwd() is node the location from which `npm install` is run, it's the installation dir of this node module i.e. <pwd>/node_modules/git-off-my-land/
+// Unsure why this isn't the case for srcBaseDir, above...
+let destBaseDir = process.env.INIT_CWD || process.cwd(); 
+
+// "fix" node 6-like behaviour to get the correct dir name (strip "node_modules/git-off-my-land" from the end)
+const destBaseDirArr = destBaseDir.split("/");
+if(destBaseDirArr.pop() === "git-off-my-land" && destBaseDirArr.pop() === "node_modules")
+{
+  destBaseDir = destBaseDirArr.join("/");
+}
 
 const configSrcDir = path.join(srcBaseDir, "/config");
 const configDestDir = path.join(destBaseDir, "/config");
@@ -41,14 +52,16 @@ catch (e)
 
 try
 {
-  fs.copyFileSync(configSrcFile, configDestFile, fs.constants.COPYFILE_EXCL); // eslint-disable-line no-sync
+  const confFile = fs.readFileSync(configSrcFile); // eslint-disable-line no-sync
+  fs.writeFileSync(configDestFile, confFile); // eslint-disable-line no-sync
 }
 catch (e)
 {
   if(e.code === "EEXIST") // Don't overwrite existing file, write to alt file instead
   {
     console.warn(`WARNING! Existing git-off-my-land config file - updated file copied to ${configDestFileAlt}. Please merge your existing config into the new format if it's changed`);
-    fs.copyFileSync(configSrcFile, configDestFileAlt, fs.constants.COPYFILE_EXCL); // eslint-disable-line no-sync
+    const confFile = fs.readFileSync(configSrcFile); // eslint-disable-line no-sync
+    fs.writeFileSync(configDestFileAlt, confFile); // eslint-disable-line no-sync
   }
   else
   {
@@ -56,16 +69,24 @@ catch (e)
   }
 }
 
+
+const hookFileOptions =
+{
+  mode: 0o755
+};
+
 try 
 {
-    fs.copyFileSync(hookSrcFile, hookDestFile, fs.constants.COPYFILE_EXCL); // eslint-disable-line no-sync
+    const hookFile = fs.readFileSync(hookSrcFile); // eslint-disable-line no-sync
+    fs.writeFileSync(hookDestFile, hookFile, hookFileOptions); // eslint-disable-line no-sync
 }
 catch(e)
 {
   if(e.code === "EEXIST") // Don't overwrite existing file, write to alt file instead
   {
     console.warn(`WARNING! Existing git-off-my-land githook file - updated file copied to ${hookDestFileAlt}. Please replace your existing hook file if you have not modified it or merge changes if you have`);
-    fs.copyFileSync(hookSrcFile, hookDestFileAlt, fs.constants.COPYFILE_EXCL); // eslint-disable-line no-sync
+    const hookFile = fs.readFileSync(hookSrcFile); // eslint-disable-line no-sync
+    fs.writeFileSync(hookDestFileAlt, hookFile, hookFileOptions); // eslint-disable-line no-sync
   }
   else
   {
