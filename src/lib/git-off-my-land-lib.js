@@ -69,7 +69,7 @@ async function scanFilteredFiles(committedFiles: Set, fileContentRegexps: Array,
 
     try
     {
-        let rawViolations = [];
+        let rawViolations = {};
         const committedFilesArray = [...committedFiles];
 
         // Note: The method for handling async/await in a for loop is from https://blog.lavrton.com/javascript-loops-how-to-handle-async-await-6252dd3c795
@@ -174,27 +174,24 @@ async function formatOutput(header: string, violations: Object, footer: string)
 
     try
     {
-        if(violations)
+        if(Object.keys(violations).length > 0)
         {
-            if(Object.keys(violations).length > 0)
+            let violationsDetails: Array = [];
+            
+            for(let i in violations)
             {
-                let violationsDetails: Array = [];
-                
-                for(let i in violations)
-                {
-                    const contentViolationsMessage = violations[i].content.join(", ");
+                const contentViolationsMessage = violations[i].content.join(", ");
 
-                    const extensionsViolationsMessage = violations[i].extension.join(", ");
+                const extensionsViolationsMessage = violations[i].extension.join(", ");
 
-                    const violationsMessage = `Content: ${contentViolationsMessage || "none"}. Filename extension: ${extensionsViolationsMessage || "none"}`;
+                const violationsMessage = `Content: ${contentViolationsMessage || "none"}. Filename extension: ${extensionsViolationsMessage || "none"}`;
 
-                    violationsDetails.push(`${i} - ${violationsMessage}`);
-                }
-
-                const sortedViolationsDetails = violationsDetails.sort();
-
-                output = [header, ...sortedViolationsDetails, footer].join(EOL);
+                violationsDetails.push(`${i} - ${violationsMessage}`);
             }
+
+            const sortedViolationsDetails = violationsDetails.sort();
+
+            output = [header, ...sortedViolationsDetails, footer].join(EOL);
         }
     }
     catch(e)
