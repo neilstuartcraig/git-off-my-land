@@ -27,6 +27,7 @@ test("Correct operation, valid, populated inputs", async (t) =>
     committedFiles.add("test/fixtures/innocuous.txt");
     committedFiles.add("test/fixtures/certs/ignored/example-ec-private--ignored.key");
     committedFiles.add("test/fixtures/certs/ignored/www.example.com--ignored.key");
+    committedFiles.add("test/fixtures/certs/ignored/");
 
     const filesToIgnore = 
     [
