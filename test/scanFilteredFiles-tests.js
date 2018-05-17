@@ -78,22 +78,20 @@ test("Correct operation, valid, empty inputs", async (t) =>
 });
 
 
-
-
-
-
-/*
 // This fails on "Unhandled Rejection" - needs to be fixed!
-test("Error handling, invalid inputs (files don"t exist)", async (t) => 
+test("Error handling, invalid inputs (files don't exist)", async (t) => 
 {
     const committedFiles = new Set();
     committedFiles.add("does/not.exist");
 
     const filesToIgnore = [];
 
-    await t.throws(async () => 
+    try
     {
-        await scanFilteredFiles(committedFiles, fileContentRegexps, violatingFilenameExtensions, filesToIgnore), "Ensure the promise is rejected on error";
-    }).catch(() => {});
+        await scanFilteredFiles(committedFiles, fileContentRegexps, violatingFilenameExtensions, filesToIgnore);
+    }
+    catch(e)
+    {
+        t.pass();
+    }
 });
-*/
