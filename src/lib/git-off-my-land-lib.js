@@ -69,7 +69,7 @@ async function scanFilteredFiles(committedFiles: Set, fileContentRegexps: Array,
 
     try
     {
-        let rawViolations = {};
+        let rawViolations = [];
         const committedFilesArray = [...committedFiles];
 
         // Note: The method for handling async/await in a for loop is from https://blog.lavrton.com/javascript-loops-how-to-handle-async-await-6252dd3c795
@@ -77,7 +77,7 @@ async function scanFilteredFiles(committedFiles: Set, fileContentRegexps: Array,
         {
             const committedFile = committedFilesArray[i];
             const stats = await stat(committedFile);
-            if(stats.isFile()) // Check we're not going to try to read a 📁 because that would 💣
+            if(stats.isFile()) // Check we're not going to try to read a dir because that would 💣
             {
                 if(rawViolations[committedFile] === undefined)
                 {
