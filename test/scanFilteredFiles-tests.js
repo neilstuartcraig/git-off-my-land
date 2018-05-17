@@ -78,7 +78,6 @@ test("Correct operation, valid, empty inputs", async (t) =>
 });
 
 
-// This fails on "Unhandled Rejection" - needs to be fixed!
 test("Error handling, invalid inputs (files don't exist)", async (t) => 
 {
     const committedFiles = new Set();
