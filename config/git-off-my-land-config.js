@@ -76,8 +76,8 @@ module.exports =
     // See https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
     "execOptions":
     {
-        cwd: process.cwd(),
-        windowsHide: true,
-        timeout: 10
+        cwd: process.cwd(), // Current working directory of the child process
+        windowsHide: true, // Hide the subprocess console window that would normally be created on Windows systems
+        timeout: 10000 // msec
     }
 };
