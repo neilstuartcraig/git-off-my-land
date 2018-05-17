@@ -38,6 +38,32 @@ const hookDestFile = path.join(hookDestDir, "/", hookFilename);
 const hookDestFileAlt = path.join(hookDestDir, "/", `${hookFilename}-${ts}`);
 
 /* eslint-disable no-sync */
+const hookFile = fs.readFileSync(hookSrcFile);
+const hookFileOptions = {
+  mode: 0o755
+};
+
+try {
+  fs.statSync(hookDestDir);
+
+  try {
+    fs.statSync(hookDestFile);
+
+    // If we get here, the dest file exists so we want to write to the alt location
+    console.warn(`WARNING! Existing git-off-my-land githook file - updated file copied to ${hookDestFileAlt}. Please replace your existing hook file if you have not modified it or merge changes if you have`);
+    fs.writeFileSync(hookDestFileAlt, hookFile, hookFileOptions);
+  } catch (e) {
+    if (e.code === "ENOENT") {
+      fs.writeFileSync(hookDestFile, hookFile, hookFileOptions);
+    } else {
+      console.error(e);
+    }
+  }
+} catch (e) {
+  console.error("Error: It looks like this is not a git-controlled project. Please run 'git init' then try the install again");
+  process.exit(1);
+}
+
 try {
   fs.mkdirSync(configDestDir);
 } catch (e) {
@@ -59,25 +85,6 @@ try {
 } catch (e) {
   if (e.code === "ENOENT") {
     fs.writeFileSync(configDestFile, confFile);
-  } else {
-    console.error(e);
-  }
-}
-
-const hookFile = fs.readFileSync(hookSrcFile);
-const hookFileOptions = {
-  mode: 0o755
-};
-
-try {
-  fs.statSync(hookDestFile);
-
-  // If we get here, the dest file exists so we want to write to the alt location
-  console.warn(`WARNING! Existing git-off-my-land githook file - updated file copied to ${hookDestFileAlt}. Please replace your existing hook file if you have not modified it or merge changes if you have`);
-  fs.writeFileSync(hookDestFileAlt, hookFile, hookFileOptions);
-} catch (e) {
-  if (e.code === "ENOENT") {
-    fs.writeFileSync(hookDestFile, hookFile, hookFileOptions);
   } else {
     console.error(e);
   }

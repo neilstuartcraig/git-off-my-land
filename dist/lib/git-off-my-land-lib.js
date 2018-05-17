@@ -101,14 +101,14 @@ async function scanFilteredFiles(committedFiles, fileContentRegexps, violatingFi
     let filteredViolations = [];
 
     try {
-        let rawViolations = [];
+        let rawViolations = {};
         const committedFilesArray = [...committedFiles];
 
         // Note: The method for handling async/await in a for loop is from https://blog.lavrton.com/javascript-loops-how-to-handle-async-await-6252dd3c795
         for (let i in committedFilesArray) {
             const committedFile = committedFilesArray[i];
             const stats = await stat(committedFile);
-            if (stats.isFile()) // Check we're not going to try to read a dir because that would bomb
+            if (stats.isFile()) // Check we're not going to try to read a dir because that would 💣
                 {
                     if (rawViolations[committedFile] === undefined) {
                         rawViolations[committedFile] = {
@@ -196,27 +196,25 @@ async function formatOutput(header, violations, footer) {
     let output = "";
 
     try {
-        if (violations) {
-            if (Object.keys(violations).length > 0) {
-                let violationsDetails = [];
+        if (Object.keys(violations).length > 0) {
+            let violationsDetails = [];
 
-                for (let i in violations) {
-                    const contentViolationsMessage = violations[i].content.join(", ");
+            for (let i in violations) {
+                const contentViolationsMessage = violations[i].content.join(", ");
 
-                    const extensionsViolationsMessage = violations[i].extension.join(", ");
+                const extensionsViolationsMessage = violations[i].extension.join(", ");
 
-                    const violationsMessage = `Content: ${contentViolationsMessage || "none"}. Filename extension: ${extensionsViolationsMessage || "none"}`;
+                const violationsMessage = `Content: ${contentViolationsMessage || "none"}. Filename extension: ${extensionsViolationsMessage || "none"}`;
 
-                    violationsDetails.push(`${i} - ${violationsMessage}`);
-                }
+                violationsDetails.push(`${i} - ${violationsMessage}`);
+            }
 
-                const sortedViolationsDetails = violationsDetails.sort();
+            const sortedViolationsDetails = violationsDetails.sort();
 
-                output = [header, ...sortedViolationsDetails, footer].join(_os.EOL);
+            output = [header, ...sortedViolationsDetails, footer].join(_os.EOL);
 
-                if (!(typeof output === 'string')) {
-                    throw new TypeError("Value of variable \"output\" violates contract.\n\nExpected:\nstring\n\nGot:\n" + _inspect(output));
-                }
+            if (!(typeof output === 'string')) {
+                throw new TypeError("Value of variable \"output\" violates contract.\n\nExpected:\nstring\n\nGot:\n" + _inspect(output));
             }
         }
     } catch (e) {
