@@ -127,3 +127,24 @@ test("Correct operation, empty violations object", async (t) =>
     t.is(output, expectedOutput, "Ensure we get an empty string");
     t.is(typeof output === "string", true, "Ensure we get a string");
 });
+
+test("Error handling, invalid inputs (files don't exist)", async (t) => 
+{
+    const header = "header";
+    const footer = "footer";
+
+    const violations = 
+    {
+        a: 1,
+        b: 2
+    };
+
+    try
+    {
+        await formatOutput(header, violations, footer);
+    }
+    catch(e)
+    {
+        t.pass("Must throw an error/reject the promise");
+    }
+});

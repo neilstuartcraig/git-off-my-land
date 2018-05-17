@@ -77,7 +77,7 @@ async function scanFilteredFiles(committedFiles: Set, fileContentRegexps: Array,
         {
             const committedFile = committedFilesArray[i];
             const stats = await stat(committedFile);
-            if(stats.isFile()) // Check we're not going to try to read a dir because that would bomb
+            if(stats.isFile()) // Check we're not going to try to read a dir because that would 💣
             {
                 if(rawViolations[committedFile] === undefined)
                 {
