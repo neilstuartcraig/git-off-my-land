@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v2.2.11
+* Improve: test coverage - branches!
+
 ## v2.2.10
 * Improve: test coverage
 
