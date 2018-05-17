@@ -1,6 +1,6 @@
 {
     "name": "git-off-my-land",
-    "version": "2.2.8",
+    "version": "2.2.9",
     "description": "A git pre-commit hook which scans committed files for TLS certificates, private keys, AWS credentials and more Edit Add topics",
     "main": "dist/lib/git-off-my-land.js",
     "config": {
@@ -40,13 +40,13 @@
     "devDependencies": {
         "ava": "^0.25.0",
         "babel-cli": "^6.26.0",
-        "babel-eslint": "^8.2.1",
+        "babel-eslint": "^8.2.3",
         "babel-plugin-syntax-flow": "^6.18.0",
         "babel-plugin-transform-flow-strip-types": "^6.22.0",
         "babel-plugin-typecheck": "^3.9.0",
         "babel-preset-es2015-node6": "^0.4.0",
         "eslint-config-tdp": "^1.3.0",
-        "nyc": "^11.4.1",
-        "snyk": "^1.69.3"
+        "nyc": "^11.8.0",
+        "snyk": "^1.80.1"
     }
 }
