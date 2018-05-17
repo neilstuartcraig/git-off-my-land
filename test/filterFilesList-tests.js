@@ -27,13 +27,20 @@ AR ooo/oar.oaz
 	t.deepEqual(filteredFiles, expectedOutput, "Ensure filteredFiles === expectedOutput");
 });
 
-/*
+
 // This fails on "Unhandled Rejection" - needs to be fixed!
 test("Error handling, invalid inputs (empty string rawStdOut)", async (t) => 
 {
-    const rawStdOut: string = ``;
+    const rawStdOut: string = ""; // This needs to be a string with no new lines (thus we get no array elements)
     const ignoreGitStatusResultPrefixes: Array = ["D", "R"];
 
-    await t.throws(filterFilesList(rawStdOut, ignoreGitStatusResultPrefixes, OSEOL), "Ensure the promise is rejected on error");
+    try
+    {
+        await filterFilesList(rawStdOut, ignoreGitStatusResultPrefixes, OSEOL); 
+    }
+    catch(err)
+    {
+        t.pass(); // We consider this test successful if the function call _does_ throw (reject the promise)
+    }
+
 });
-*/
