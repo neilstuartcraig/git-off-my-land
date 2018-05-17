@@ -1,5 +1,9 @@
 # git-off-my-land changelog
 
+## v2.2.7
+* Fix: Bad default on exec timeout - was 10 msec, now 10 sec
+* Improve: comments on exec options in config file
+
 ## v2.2.6
 * Fix: installer for node < 8.5
 
