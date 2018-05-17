@@ -128,6 +128,27 @@ test("Correct operation, empty violations object", async (t) =>
     t.is(typeof output === "string", true, "Ensure we get a string");
 });
 
+
+
+
+test("Correct operation, null violations object", async (t) => 
+{
+    const header = "header";
+    const footer = "footer";
+
+    const violations = null; //eslint-disable-line object-curly-newline
+
+    const expectedOutput = "";
+
+    const output = await formatOutput(header, violations, footer);
+
+    t.is(output, expectedOutput, "Ensure we get an empty string");
+    t.is(typeof output === "string", true, "Ensure we get a string");
+});
+
+
+
+
 test("Error handling, invalid inputs (files don't exist)", async (t) => 
 {
     const header = "header";
