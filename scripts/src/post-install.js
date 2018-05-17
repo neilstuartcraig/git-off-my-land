@@ -28,19 +28,19 @@ const configDestDir = path.join(destBaseDir, "/config");
 const configFilename = "git-off-my-land-config.js";
 const configSrcFile = path.join(configSrcDir, "/", configFilename);
 const configDestFile = path.join(configDestDir, "/", configFilename);
-const configDestFileAlt = path.join(configDestDir, "/", `new-${ts}-configFilename`);
+const configDestFileAlt = path.join(configDestDir, "/", `${ts}-${configFilename}`);
 
 const hookSrcDir = path.join(srcBaseDir, "/hooks");
 const hookDestDir = path.join(destBaseDir, "/.git/hooks");
 const hookFilename = "pre-commit";
 const hookSrcFile = path.join(hookSrcDir, "/", hookFilename);
 const hookDestFile = path.join(hookDestDir, "/", hookFilename);
-const hookDestFileAlt = path.join(hookDestDir, "/", `new-${ts}-hookFilename`);
+const hookDestFileAlt = path.join(hookDestDir, "/", `${hookFilename}-${ts}`);
 
-// TODO: Make this neater
+/* eslint-disable no-sync */
 try
 {
-  fs.mkdirSync(configDestDir); // eslint-disable-line no-sync
+  fs.mkdirSync(configDestDir); 
 }
 catch (e)
 {
@@ -50,18 +50,23 @@ catch (e)
   }
 }
 
+
+const confFile = fs.readFileSync(configSrcFile); 
+
 try
 {
-  const confFile = fs.readFileSync(configSrcFile); // eslint-disable-line no-sync
-  fs.writeFileSync(configDestFile, confFile); // eslint-disable-line no-sync
+  
+  fs.statSync(configDestFile);
+
+  // If we get here, the dest file exists so we want to write to the alt location
+  console.warn(`WARNING! Existing git-off-my-land config file - updated file copied to ${configDestFileAlt}. Please merge your existing config into the new format if it's changed`);
+  fs.writeFileSync(configDestFileAlt, confFile);
 }
 catch (e)
 {
-  if(e.code === "EEXIST") // Don't overwrite existing file, write to alt file instead
+  if(e.code === "ENOENT")
   {
-    console.warn(`WARNING! Existing git-off-my-land config file - updated file copied to ${configDestFileAlt}. Please merge your existing config into the new format if it's changed`);
-    const confFile = fs.readFileSync(configSrcFile); // eslint-disable-line no-sync
-    fs.writeFileSync(configDestFileAlt, confFile); // eslint-disable-line no-sync
+    fs.writeFileSync(configDestFile, confFile);
   }
   else
   {
@@ -70,6 +75,7 @@ catch (e)
 }
 
 
+const hookFile = fs.readFileSync(hookSrcFile);
 const hookFileOptions =
 {
   mode: 0o755
@@ -77,19 +83,21 @@ const hookFileOptions =
 
 try 
 {
-    const hookFile = fs.readFileSync(hookSrcFile); // eslint-disable-line no-sync
-    fs.writeFileSync(hookDestFile, hookFile, hookFileOptions); // eslint-disable-line no-sync
+  fs.statSync(hookDestFile);
+
+  // If we get here, the dest file exists so we want to write to the alt location
+  console.warn(`WARNING! Existing git-off-my-land githook file - updated file copied to ${hookDestFileAlt}. Please replace your existing hook file if you have not modified it or merge changes if you have`);
+  fs.writeFileSync(hookDestFileAlt, hookFile, hookFileOptions); 
 }
 catch(e)
 {
-  if(e.code === "EEXIST") // Don't overwrite existing file, write to alt file instead
+  if(e.code === "ENOENT")
   {
-    console.warn(`WARNING! Existing git-off-my-land githook file - updated file copied to ${hookDestFileAlt}. Please replace your existing hook file if you have not modified it or merge changes if you have`);
-    const hookFile = fs.readFileSync(hookSrcFile); // eslint-disable-line no-sync
-    fs.writeFileSync(hookDestFileAlt, hookFile, hookFileOptions); // eslint-disable-line no-sync
+    fs.writeFileSync(hookDestFile, hookFile, hookFileOptions); 
   }
   else
   {
     console.error(e);
   }
 }
+/* enable-eslint */

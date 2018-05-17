@@ -1,6 +1,6 @@
 {
     "name": "git-off-my-land",
-    "version": "2.2.7",
+    "version": "2.2.8",
     "description": "A git pre-commit hook which scans committed files for TLS certificates, private keys, AWS credentials and more Edit Add topics",
     "main": "dist/lib/git-off-my-land.js",
     "config": {

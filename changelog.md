@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v2.2.8
+* Fix: Bug in `post-install` script which meant that the config and hook files were overwritten if they existed
+
 ## v2.2.7
 * Fix: Bad default on exec timeout - was 10 msec, now 10 sec
 * Improve: comments on exec options in config file
