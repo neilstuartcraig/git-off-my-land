@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v2.2.12
+* Improve: post-install scripts - now shows a message if `git init` hasn't been run (i.e. it's not a `git`-controlled project)
+
 ## v2.2.11
 * Improve: test coverage - branches!
 
