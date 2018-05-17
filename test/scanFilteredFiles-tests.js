@@ -91,6 +91,6 @@ test("Error handling, invalid inputs (files don't exist)", async (t) =>
     }
     catch(e)
     {
-        t.pass();
+        t.pass("Must throw an error/reject the promise");
     }
 });

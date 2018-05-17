@@ -40,7 +40,7 @@ test("Error handling, invalid inputs (empty string rawStdOut)", async (t) =>
     }
     catch(err)
     {
-        t.pass(); // We consider this test successful if the function call _does_ throw (reject the promise)
+        t.pass("Must throw an error/reject the promise");
     }
 
 });
