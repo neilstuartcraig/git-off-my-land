@@ -1,5 +1,8 @@
 # git-off-my-land changelog
 
+## v2.2.9
+* Update: dependencies
+
 ## v2.2.8
 * Fix: Bug in `post-install` script which meant that the config and hook files were overwritten if they existed
 
