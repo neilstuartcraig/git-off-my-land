@@ -45,7 +45,7 @@
         "babel-plugin-typecheck": "^3.9.0",
         "babel-preset-es2015-node6": "^0.4.0",
         "eslint-config-tdp": "^1.3.0",
-        "nyc": "^11.8.0",
+        "nyc": "^15.1.0",
         "snyk": "^1.80.1"
     }
 }
